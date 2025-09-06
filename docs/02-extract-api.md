@@ -83,3 +83,4 @@ Example:
 - Place example documents under `examples/files/` and example schemas under `examples/schemas/`.
 - Set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT`, and `GOOGLE_CLOUD_LOCATION=europe-west4` to use Vertex AI.
 - This demo does not store files; it forwards content to the model (or stubs locally).
+ - Deployment: copy `.env.yaml.example` to `.env.yaml`, edit values, then run `make enable-apis` (one-time) and `make deploy-api` from the repo root. Inspect `Makefile` for details.

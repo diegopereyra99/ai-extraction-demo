@@ -1,0 +1,15 @@
+# Python junk
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Other local stuff
+.DS_Store
+.git/
+
+# Example env vars
