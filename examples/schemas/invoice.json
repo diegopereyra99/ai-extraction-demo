@@ -1,0 +1,53 @@
+{
+  "type": "OBJECT",
+  "title": "Invoice",
+  "description": "Essential flat fields of a typical invoice or receipt.",
+  "properties": {
+    "invoice_number": { "type": "string", "description": "Invoice/receipt number as written on the document." },
+    "issue_date": { "type": "string", "format": "date", "description": "Issue date (YYYY-MM-DD)." },
+    "due_date": { "type": "string", "format": "date", "description": "Due date (YYYY-MM-DD), if present." },
+
+    "currency": { "type": "string", "description": "Currency code (e.g. USD, EUR)." },
+
+    "supplier_name": { "type": "string", "description": "Supplier or issuer name." },
+    "supplier_tax_id": { "type": "string", "description": "Supplier VAT/Tax ID if available." },
+    "supplier_address": { "type": "string", "description": "Supplier address (single line)." },
+
+    "customer_name": { "type": "string", "description": "Customer or recipient name." },
+    "customer_tax_id": { "type": "string", "description": "Customer VAT/Tax ID if available.", "nullable": true },
+    "customer_address": { "type": "string", "description": "Customer address (single line)." },
+
+    "items_count": { "type": "number", "description": "Approximate number of invoice line items." },
+    "items": {
+      "type": "array",
+      "description": "List of ordered products.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "quantity": { "type": "number" },
+          "unit_price": { "type": "number" },
+          "tax_percent": { "type": "number", "description": "Tax percentage if shown (e.g. 21 for 21%)." },
+          "line_total": { "type": "number", "description": "Total amount of the line item." }
+        },
+        "required": ["description", "quantity", "unit_price"]
+      }
+    },
+
+    "subtotal": { "type": "number" },
+    "taxes": { "type": "number", "description": "Total taxes." },
+    "total": { "type": "number" },
+
+    "paid": { "type": "boolean", "description": "Whether the invoice is marked as paid." },
+    "notes": { "type": "string", "description": "Extra notes, terms, or conditions." }
+  },
+  "required": [
+    "invoice_number",
+    "issue_date",
+    "currency",
+    "supplier_name",
+    "customer_name",
+    "total"
+  ]
+}
+

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Builds
+build/
+dist/
+*.egg-info/
+
+# Project temp
+tmp/
+.env
+*.log
+
+# Files
+*.pdf
+*.json
+*.jpg
+

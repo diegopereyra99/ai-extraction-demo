@@ -65,7 +65,7 @@ gemini-extractor/
 > **Nota**: esta demo **no** guarda ni cachea archivos; solo enruta a Gemini y devuelve la respuesta.
 
 ## 6) Frontend — Requisitos y UI (ligero)
-- **Ejecución**: abrir `index.html` localmente; para evitar CORS/paths, ideal correr un **servidor estático** simple (e.g., `python -m http.server`), pero **sin bundlers**.
+- **Ejecución**: abrir `index.html` localmente; para evitar CORS/paths, ideal correr un **servidor estático** simple, pero **sin bundlers**.
 - **Estructura de archivos (`/web`)**:
 
 ```
@@ -180,6 +180,7 @@ web/
 - Error de schema malformado → `400` + mensaje claro.
 - Archivo muy grande → `413` + texto que sugiera V2 (GCS).
 - Error de modelo (forzado) → `500` + `trace_id`.
+- Todo el codigo y la documentacion va a ser en ingles
 
 **Frontend (manual)**
 - Configurar `API_URL`.  
