@@ -21,7 +21,7 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
 - Gemini via Vertex AI (no API key): enabled by env var.
 - Monorepo layout:
   - `api/` — Cloud Function code and local run instructions
-  - `docs/` — specs and setup
+  - `docs/` — specs and setup (see filenames in this folder)
   - `examples/` — sample files and schemas
   - `web/` — frontend (with `i18n/` locale files and `i18n.js` loader)
 
@@ -69,7 +69,7 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
 
 ## Schema (flat)
 - Top-level: `{ "type": "OBJECT", "properties": { ... }, "required": [] }`.
-- Property types: `STRING`, `NUMBER`, `BOOLEAN`. Dates use `type: "STRING"` + `format: "date"` (the UI maps `DATE` selection to this).
+- Property types: `STRING`, `NUMBER`, `BOOLEAN`. Dates use `type: "STRING"` + `format": "date"` (the UI maps `DATE` selection to this).
 - Validation (server): minimal structural checks — must be OBJECT with `properties` object.
 - Validation (client): name required and unique; at least one field; types from allowed list; required defaults to true.
 
