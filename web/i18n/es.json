@@ -3,7 +3,7 @@
   "header": { "language": "Idioma" },
   "files": {
     "title": "Archivos",
-    "dropHint": "Arrastra y suelta archivos aquí",
+    "dropHint": "Arrastra y suelta archivos aquí o haz clic para seleccionar",
     "select": "Seleccionar archivos"
   },
   "schema": {
@@ -17,14 +17,24 @@
     "type": {
       "STRING": "Texto",
       "NUMBER": "Número",
-      "BOOLEAN": "Booleano",
+      "BOOLEAN": "Sí / No",
       "DATE": "Fecha"
     }
   },
-  "advanced": { "title": "Configuración avanzada", "showPreview": "Mostrar vista previa del esquema" },
+  "advanced": {
+    "title": "Configuración avanzada",
+    "showPreview": "Mostrar vista previa del esquema",
+    "sections": {"prompt": "Prompt", "system": "Instrucción del sistema", "model": "Modelo", "options": "Opciones"},
+    "help": {
+      "prompt": "Instrucción específica de la tarea. Describe qué extraer.",
+      "system": "Reglas/comportamiento global del modelo. Se aplica a todas las solicitudes.",
+      "model": "Elige el modelo del proveedor para ejecutar la extracción.",
+      "options": "Interruptores y opciones de visualización adicionales."
+    }
+  },
   "inputs": {
-    "prompt": { "label": "Prompt", "placeholder": "Explicación/contexto breve (opcional)" },
-    "system": { "label": "Instrucción del sistema", "placeholder": "Instrucciones sobre el comportamiento del sistema (opcional)" }
+    "prompt": { "label": "Prompt", "placeholder": "Extrae los campos solicitados de la entrada. Mantén las respuestas concisas." },
+    "system": { "label": "Instrucción del sistema", "placeholder": "No inventes datos. Usa null si falta información. Sigue estrictamente el esquema JSON proporcionado." }
   },
   "model": { "label": "Modelo" },
   "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar" },

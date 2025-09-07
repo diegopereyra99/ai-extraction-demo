@@ -3,7 +3,7 @@
   "header": { "language": "Language" },
   "files": {
     "title": "Files",
-    "dropHint": "Drag & drop files here",
+    "dropHint": "Drag & drop files here or click to select",
     "select": "Select files"
   },
   "schema": {
@@ -15,16 +15,26 @@
     "description": { "placeholder": "Description (optional)" },
     "required": "Required",
     "type": {
-      "STRING": "String",
+      "STRING": "Text",
       "NUMBER": "Number",
-      "BOOLEAN": "Boolean",
+      "BOOLEAN": "Yes / No",
       "DATE": "Date"
     }
   },
-  "advanced": { "title": "Advanced configuration", "showPreview": "Show schema preview" },
+  "advanced": {
+    "title": "Advanced configuration",
+    "showPreview": "Show schema preview",
+    "sections": {"prompt": "Prompt", "system": "System Instruction", "model": "Model", "options": "Options"},
+    "help": {
+      "prompt": "Task-specific instruction. Used to describe what to extract.",
+      "system": "Global behavior/rules for the model. Applied to all requests.",
+      "model": "Choose the provider model to run the extraction.",
+      "options": "Additional toggles and display options."
+    }
+  },
   "inputs": {
-    "prompt": { "label": "Prompt", "placeholder": "Brief explanation/context (optional)" },
-    "system": { "label": "System Instruction", "placeholder": "Instructions about the system behavior (optional)" }
+    "prompt": { "label": "Prompt", "placeholder": "Extract the requested fields from the input. Keep responses concise." },
+    "system": { "label": "System Instruction", "placeholder": "Do not fabricate data. Use null when information is missing. Follow the provided JSON schema strictly." }
   },
   "model": { "label": "Model" },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },

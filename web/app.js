@@ -13,6 +13,11 @@
 
   function $(id) { return document.getElementById(id); }
 
+  // Schema field factory usable across handlers
+  function makeField() {
+    return { id: crypto.randomUUID(), name: '', required: true, description: '', type: 'STRING' };
+  }
+
   function showConfigWarning() {
     const warn = $('configWarning');
     if (!window.APP_CONFIG || !window.APP_CONFIG.API_URL) {
@@ -26,8 +31,11 @@
   function initLanguage() {
     I18n.init().then(() => {
       // Set default placeholders
-      $('systemInput').placeholder = I18n.t('inputs.system.placeholder');
-      $('promptInput').placeholder = I18n.t('inputs.prompt.placeholder');
+      // Keep explicit defaults already set in HTML; if i18n provides values, prefer them
+      const sys = I18n.t('inputs.system.placeholder');
+      const prm = I18n.t('inputs.prompt.placeholder');
+      if (sys && sys !== 'inputs.system.placeholder') $('systemInput').placeholder = sys;
+      if (prm && prm !== 'inputs.prompt.placeholder') $('promptInput').placeholder = prm;
       showConfigWarning();
     });
   }
@@ -35,11 +43,20 @@
   function initFiles() {
     const drop = $('dropzone');
     const input = $('fileInput');
-    const selectBtn = $('selectFilesBtn');
     const list = $('fileList');
 
     function totalBytes() { return state.files.reduce((s,f)=>s+Number(f.size||0),0); }
     function human(bytes){ if(bytes<1024) return `${bytes} B`; const kb=bytes/1024; if(kb<1024) return `${kb.toFixed(1)} KB`; const mb=kb/1024; return `${mb.toFixed(2)} MB`; }
+    function humanFile(bytes){
+      if (!Number.isFinite(bytes)) return '';
+      if (bytes < 1024) return `${bytes} B`;
+      const kb = bytes / 1024;
+      if (kb < 1024) return `${(kb < 10 ? kb.toFixed(1) : Math.round(kb)).toString()} KB`;
+      const mb = kb / 1024;
+      if (mb < 1024) return `${(mb < 10 ? mb.toFixed(1) : Math.round(mb)).toString()} MB`;
+      const gb = mb / 1024;
+      return `${(gb < 10 ? gb.toFixed(1) : Math.round(gb)).toString()} GB`;
+    }
     function getLimit() { return Number(window.APP_CONFIG?.MAX_TOTAL_UPLOAD_BYTES || 20*1024*1024); }
     function renderSizeInfo(){
       const el = $('fileSizeInfo');
@@ -54,13 +71,88 @@
       const drop = $('dropzone');
       if (drop) { if (over) drop.classList.add('error'); else drop.classList.remove('error'); }
     }
+    function iconSvg(kind) {
+      const bg = ({
+        image: '#3b82f6', // blue
+        sheet: '#22c55e', // green
+        slide: '#f59e0b', // amber
+        doc: '#60a5fa',   // light blue
+        txtjson: '#8b5cf6', // violet
+        pdf: '#ef4444',   // red
+        file: '#64748b',  // slate
+      })[kind] || '#64748b';
+      switch (kind) {
+        case 'image':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M5 7h14v10H5V7zm3 .5A1.5 1.5 0 1 0 8 10a1.5 1.5 0 0 0 0-3.5zM7 17l4-4 3 3 3-3 2 4H7z"/></svg>`;
+        case 'sheet':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M6 6h12v12H6V6zm2 2h3v3H8V8zm0 5h3v3H8v-3zm5-5h3v3h-3V8zm0 5h3v3h-3v-3z"/></svg>`;
+        case 'slide':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M4 8h16v7H4V8zm2 2h7v2H6v-2z"/><path fill="#fff" d="M13 17l1.5 2h-3L10 17h3z"/></svg>`;
+        case 'doc':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M7 5h7l3 3v9H7V5zm7 .5V9h3.5L14 5.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>`;
+        case 'txtjson':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M7 5h7l3 3v9H7V5zm7 .5V9h3.5L14 5.5zM8 12h8v1.5H8V12zm0 3h8v1.5H8V15z"/></svg>`;
+        case 'pdf':
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M8 13.5h2.75a1.75 1.75 0 0 1 0 3.5H8v-3.5zm1.5 1.25v1h1.25a.5.5 0 0 0 0-1H9.5zM12.75 13.5H15a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-.75.75h-2.25v-3.5zm1.5 1.25v1h.75v-1h-.75zM16.5 13.5h2v.75h-1.25V15H18v.75h-.75V17h-1.25v-3.5z"/></svg>`;
+        default:
+          return `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="5" fill="${bg}"/><path fill="#fff" d="M7 4h7l5 5v10H7V4zm7 1.5V9h4.5L14 5.5z"/></svg>`;
+      }
+    }
+
+    function getExt(name) {
+      const i = name.lastIndexOf('.');
+      return i >= 0 ? name.slice(i + 1).toLowerCase() : '';
+    }
+
+    function detectKind(file) {
+      const type = (file.type || '').toLowerCase();
+      const ext = getExt(file.name || '');
+      if (type === 'application/pdf' || ext === 'pdf') return { kind: 'pdf', label: 'PDF file' };
+      if (type.startsWith('image/')) {
+        if (['jpeg','jpg','png','webp','heic','heif'].includes(ext) || ['image/jpeg','image/png','image/webp','image/heic','image/heif'].includes(type)) {
+          return { kind: 'image', label: 'Image file' };
+        }
+      }
+      if (['docx','xlsx','pptx'].includes(ext)) {
+        if (ext === 'docx') return { kind: 'doc', label: 'Document file' };
+        if (ext === 'xlsx') return { kind: 'sheet', label: 'Spreadsheet file' };
+        if (ext === 'pptx') return { kind: 'slide', label: 'Presentation file' };
+      }
+      if (type === 'text/plain' || type === 'application/json' || ext === 'txt' || ext === 'json') {
+        return { kind: 'txtjson', label: ext === 'json' || type === 'application/json' ? 'JSON file' : 'Text file' };
+      }
+      return { kind: 'file', label: 'File' };
+    }
+
     function renderList() {
       list.innerHTML = '';
       state.files.forEach((f, i) => {
         const li = document.createElement('li');
+        li.className = 'file-card';
         const left = document.createElement('span');
+        left.className = 'file-left';
         const right = document.createElement('button');
-        left.textContent = `${f.name} — ${(f.size/1024).toFixed(1)} KB`;
+        const { kind, label } = detectKind(f);
+        const icon = document.createElement('span');
+        icon.className = 'file-icon';
+        icon.innerHTML = iconSvg(kind);
+        const sr = document.createElement('span');
+        sr.className = 'sr-only';
+        sr.textContent = label;
+        const nameText = document.createElement('span');
+        nameText.className = 'file-name';
+        nameText.textContent = `${f.name}`;
+        const sizeStr = humanFile(Number(f.size||0));
+        const sizeWm = document.createElement('span');
+        sizeWm.className = 'file-size-watermark';
+        sizeWm.setAttribute('aria-hidden', 'true');
+        sizeWm.textContent = sizeStr;
+        const srSize = document.createElement('span');
+        srSize.className = 'sr-only';
+        srSize.textContent = `Size ${sizeStr}`;
+        left.append(icon, sr, nameText, srSize);
+        // Place watermark on the card but leave space for the remove button
+        li.appendChild(sizeWm);
         right.textContent = '×';
         right.setAttribute('aria-label', I18n.t('actions.remove'));
         right.title = I18n.t('actions.remove');
@@ -87,23 +179,52 @@
       input.value = '';
       renderList(); renderSizeInfo(); maybeEnableSubmit();
     });
-    selectBtn.addEventListener('click', () => input.click());
+    // Click/keyboard on dropzone opens file dialog
+    drop.addEventListener('click', () => input.click());
+    drop.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
   }
 
   function initSchema() {
     const fieldsEl = $('fieldsContainer');
-    const addBtn = $('addFieldBtn');
     const preview = $('schemaPreview');
-
-    function makeField() {
-      return { id: crypto.randomUUID(), name: '', required: true, description: '', type: 'STRING' };
-    }
+    let dragIndex = -1;
 
     function renderFields(focusNew = false) {
       fieldsEl.innerHTML = '';
       state.fields.forEach((fld, idx) => {
         const row = document.createElement('div');
         row.className = 'field-row';
+        row.setAttribute('draggable', 'true');
+        row.addEventListener('dragstart', (e) => {
+          // Prevent drag from interactive controls
+          const tag = e.target && e.target.tagName;
+          if (tag && ['INPUT','SELECT','TEXTAREA','BUTTON','LABEL'].includes(tag)) { e.preventDefault(); return; }
+          dragIndex = idx;
+          row.classList.add('dragging');
+          try { e.dataTransfer.effectAllowed = 'move'; } catch {}
+        });
+        row.addEventListener('dragend', () => {
+          row.classList.remove('dragging');
+          dragIndex = -1;
+          document.querySelectorAll('.field-row.drag-over').forEach(el => el.classList.remove('drag-over'));
+        });
+        row.addEventListener('dragover', (e) => { e.preventDefault(); row.classList.add('drag-over'); });
+        row.addEventListener('dragleave', () => { row.classList.remove('drag-over'); });
+        row.addEventListener('drop', (e) => {
+          e.preventDefault();
+          row.classList.remove('drag-over');
+          if (dragIndex === -1 || dragIndex === idx) return;
+          const from = dragIndex;
+          let to = idx;
+          if (from < to) to--; // adjust for removal index shift
+          const [moved] = state.fields.splice(from, 1);
+          state.fields.splice(to, 0, moved);
+          dragIndex = -1;
+          renderFields();
+          updatePreview();
+        });
         const name = document.createElement('input');
         name.placeholder = I18n.t('schema.name.placeholder');
         name.value = fld.name;
@@ -147,6 +268,49 @@
         fieldsEl.appendChild(row);
         if (focusNew && idx === state.fields.length - 1) { name.focus(); }
       });
+      // Add button inside container as last row
+      const add = document.createElement('button');
+      add.type = 'button';
+      add.id = 'addFieldBtn';
+      add.className = 'field-add';
+      const plus = document.createElement('span'); plus.setAttribute('aria-hidden','true'); plus.textContent = '+';
+      const lbl = document.createElement('span'); lbl.textContent = I18n.t('schema.addField');
+      add.append(plus, lbl);
+      add.addEventListener('click', () => {
+        state.fields.push(makeField());
+        renderFields(true);
+        updatePreview();
+        try {
+          if (fieldsEl.scrollHeight > fieldsEl.clientHeight) {
+            fieldsEl.scrollTop = fieldsEl.scrollHeight;
+          }
+        } catch {}
+      });
+      fieldsEl.appendChild(add);
+      // Allow dropping at the end to append
+      fieldsEl.addEventListener('dragover', (e) => { e.preventDefault(); });
+      fieldsEl.addEventListener('drop', (e) => {
+        if (dragIndex === -1) return;
+        const from = dragIndex;
+        let to = state.fields.length; // dropping after last row appends to end
+        const [moved] = state.fields.splice(from, 1);
+        state.fields.splice(to, 0, moved);
+        dragIndex = -1;
+        renderFields();
+        updatePreview();
+        try {
+          if (fieldsEl.scrollHeight > fieldsEl.clientHeight) {
+            fieldsEl.scrollTop = fieldsEl.scrollHeight;
+          }
+        } catch {}
+      }, { once: true });
+      if (focusNew) {
+        try {
+          if (fieldsEl.scrollHeight > fieldsEl.clientHeight) {
+            fieldsEl.scrollTop = fieldsEl.scrollHeight;
+          }
+        } catch {}
+      }
     }
 
     function buildSchema() {
@@ -174,9 +338,7 @@
       maybeEnableSubmit();
     }
 
-    addBtn.addEventListener('click', () => { state.fields.push(makeField()); renderFields(true); updatePreview(); });
-    // Start with one field for UX
-    state.fields.push(makeField());
+    // Start empty: only inline "+ Add field" button is shown
     renderFields();
     updatePreview();
   }
@@ -232,12 +394,12 @@
   function initActions() {
     $('clearBtn').addEventListener('click', () => {
       state.files = []; $('fileList').innerHTML='';
-      state.fields = []; $('fieldsContainer').innerHTML='';
+      state.fields = [];
       $('schemaPreview').textContent='';
       $('promptInput').value=''; $('systemInput').value='';
       $('result').innerHTML=''; $('status').textContent='';
-      // re-init schema
-      state.fields = []; document.querySelector('#addFieldBtn').click();
+      // Re-render schema box with only the inline add button
+      initSchema();
       maybeEnableSubmit();
     });
     $('submitBtn').addEventListener('click', onSubmit);
@@ -340,9 +502,36 @@
     const toggle = document.getElementById('advancedToggle');
     const panel = document.getElementById('advancedPanel');
     if (toggle && panel) {
+      // Prepare panel for animation
+      panel.classList.remove('hidden');
+      panel.style.maxHeight = '0px';
+      panel.style.opacity = '0';
+      toggle.setAttribute('aria-expanded', 'false');
+      let animating = false;
       toggle.addEventListener('click', () => {
-        const hidden = panel.classList.toggle('hidden');
-        toggle.setAttribute('aria-expanded', hidden ? 'false' : 'true');
+        if (animating) return;
+        animating = true;
+        const opening = !panel.classList.contains('is-open');
+        if (opening) {
+          panel.classList.add('is-open');
+          // set to scrollHeight for transition then clear to auto
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+          panel.style.opacity = '1';
+          const onEnd = () => { panel.style.maxHeight = 'none'; panel.removeEventListener('transitionend', onEnd); animating = false; };
+          panel.addEventListener('transitionend', onEnd);
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          // from auto to fixed height to 0
+          const current = panel.scrollHeight;
+          panel.style.maxHeight = current + 'px';
+          // force reflow
+          void panel.offsetHeight;
+          panel.style.maxHeight = '0px';
+          panel.style.opacity = '0';
+          const onEnd = () => { panel.classList.remove('is-open'); panel.removeEventListener('transitionend', onEnd); animating = false; };
+          panel.addEventListener('transitionend', onEnd);
+          toggle.setAttribute('aria-expanded', 'false');
+        }
       });
     }
     // Schema preview toggle (default off)
