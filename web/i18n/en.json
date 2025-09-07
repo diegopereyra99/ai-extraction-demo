@@ -8,10 +8,12 @@
   },
   "schema": {
     "title": "Schema & Result",
+    "configTitle": "Schema & Configuration",
     "addField": "Add field",
     "preview": "Schema (preview)",
     "name": { "placeholder": "Field name" },
     "description": { "placeholder": "Description (optional)" },
+    "required": "Required",
     "type": {
       "STRING": "String",
       "NUMBER": "Number",
@@ -19,9 +21,10 @@
       "DATE": "Date"
     }
   },
+  "advanced": { "title": "Advanced configuration", "showPreview": "Show schema preview" },
   "inputs": {
-    "prompt": { "label": "Prompt", "placeholder": "Short instruction (optional)" },
-    "system": { "label": "System Instruction", "placeholder": "Default instructions if left empty" }
+    "prompt": { "label": "Prompt", "placeholder": "Brief explanation/context (optional)" },
+    "system": { "label": "System Instruction", "placeholder": "Instructions about the system behavior (optional)" }
   },
   "model": { "label": "Model" },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },

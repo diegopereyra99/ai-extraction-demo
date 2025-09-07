@@ -122,9 +122,17 @@
         desc.value = fld.description;
         desc.addEventListener('input', () => { fld.description = desc.value; updatePreview(); });
 
+        const reqWrap = document.createElement('label');
+        reqWrap.style.display = 'inline-flex';
+        reqWrap.style.alignItems = 'center';
+        reqWrap.style.gap = '6px';
         const req = document.createElement('input');
-        req.type = 'checkbox'; req.checked = fld.required;
+        req.type = 'checkbox'; req.checked = fld.required; req.id = `req_${fld.id}`;
         req.addEventListener('change', () => { fld.required = req.checked; updatePreview(); });
+        const reqLbl = document.createElement('span');
+        reqLbl.textContent = I18n.t('schema.required');
+        reqWrap.htmlFor = req.id;
+        reqWrap.append(req, reqLbl);
 
         const del = document.createElement('button');
         del.textContent = '×'; del.title = I18n.t('actions.remove'); del.setAttribute('aria-label', I18n.t('actions.remove'));
@@ -135,7 +143,7 @@
           if (addBtn) addBtn.focus();
         });
 
-        row.append(name, type, desc, req, del);
+        row.append(name, type, desc, reqWrap, del);
         fieldsEl.appendChild(row);
         if (focusNew && idx === state.fields.length - 1) { name.focus(); }
       });
@@ -328,6 +336,26 @@
     initLanguage();
     initFiles();
     initSchema();
+    // Collapsible advanced config toggle
+    const toggle = document.getElementById('advancedToggle');
+    const panel = document.getElementById('advancedPanel');
+    if (toggle && panel) {
+      toggle.addEventListener('click', () => {
+        const hidden = panel.classList.toggle('hidden');
+        toggle.setAttribute('aria-expanded', hidden ? 'false' : 'true');
+      });
+    }
+    // Schema preview toggle (default off)
+    const prevToggle = document.getElementById('schemaPreviewToggle');
+    const prevBlock = document.getElementById('schemaPreviewBlock');
+    if (prevToggle && prevBlock) {
+      prevToggle.checked = false;
+      prevBlock.classList.add('hidden');
+      prevToggle.addEventListener('change', () => {
+        if (prevToggle.checked) prevBlock.classList.remove('hidden');
+        else prevBlock.classList.add('hidden');
+      });
+    }
     initActions();
   });
 })();

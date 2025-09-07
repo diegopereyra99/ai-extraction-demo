@@ -8,10 +8,12 @@
   },
   "schema": {
     "title": "Esquema y Resultado",
+    "configTitle": "Esquema y Configuración",
     "addField": "Agregar campo",
     "preview": "Esquema (vista previa)",
     "name": { "placeholder": "Nombre del campo" },
     "description": { "placeholder": "Descripción (opcional)" },
+    "required": "Obligatorio",
     "type": {
       "STRING": "Texto",
       "NUMBER": "Número",
@@ -19,9 +21,10 @@
       "DATE": "Fecha"
     }
   },
+  "advanced": { "title": "Configuración avanzada", "showPreview": "Mostrar vista previa del esquema" },
   "inputs": {
-    "prompt": { "label": "Prompt", "placeholder": "Prompt breve (opcional)" },
-    "system": { "label": "Instrucción del sistema", "placeholder": "Instrucciones por defecto si se deja vacío" }
+    "prompt": { "label": "Prompt", "placeholder": "Explicación/contexto breve (opcional)" },
+    "system": { "label": "Instrucción del sistema", "placeholder": "Instrucciones sobre el comportamiento del sistema (opcional)" }
   },
   "model": { "label": "Modelo" },
   "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar" },
