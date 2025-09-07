@@ -1,5 +1,8 @@
 {
-  "app": { "title": "Estrattore Strutturato" },
+  "app": {
+    "title": "Estrattore di Dati Strutturati",
+    "subtitle": "Estrai dati strutturati dai file con uno schema personalizzato. Demo semplificata per fare prove semplici."
+  },
   "header": { "language": "Lingua", "help": "Guida" },
   "files": {
     "title": "File",

@@ -1,5 +1,8 @@
 {
-  "app": { "title": "Structured Extractor" },
+  "app": {
+    "title": "Structured Data Extractor",
+    "subtitle": "Extract structured data from files using a custom schema you define here. Simplified demo for quick tests."
+  },
   "header": { "language": "Language", "help": "Help" },
   "files": {
     "title": "Files",

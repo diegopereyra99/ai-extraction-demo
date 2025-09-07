@@ -1,5 +1,8 @@
 {
-  "app": { "title": "Extractor Estructurado" },
+  "app": {
+    "title": "Extractor de Datos Estructurados",
+    "subtitle": "Extrae datos estructurados de archivos con un esquema personalizado. Demo simplificada para hacer pruebas simples."
+  },
   "header": { "language": "Idioma", "help": "Ayuda" },
   "files": {
     "title": "Archivos",

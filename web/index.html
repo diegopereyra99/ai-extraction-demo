@@ -3,14 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title data-i18n="app.title">Structured Extractor</title>
+    <title data-i18n="app.title">Structured Data Extractor</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div id="configWarning" class="banner banner-warn" hidden></div>
 
     <header class="topbar">
-      <h1 class="app-title" data-i18n="app.title">Structured Extractor</h1>
+      <div class="title-group">
+        <h1 class="app-title" data-i18n="app.title">Structured Data Extractor</h1>
+        <p class="app-subtitle" data-i18n="app.subtitle">Extract structured data from files using a custom schema you define here. Demo app; more complex scenarios are possible.</p>
+      </div>
       <div class="spacer"></div>
       <label for="langSelect" class="label" data-i18n="header.language">Language</label>
       <select id="langSelect" aria-label="Language selector">
