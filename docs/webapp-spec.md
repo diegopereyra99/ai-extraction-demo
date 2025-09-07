@@ -106,12 +106,15 @@ web/
   - IT: “Non inventare dati. Usa null se mancano informazioni. Rispondi seguendo rigorosamente lo schema fornito.”
 - Model: select with `gemini-2.5-flash` (default) and room to extend. Include a free-text override input if desired in v0.
 
-### Submit Button State
-- Disabled when:
-  - Schema invalid (0 fields, missing/duplicate names, unknown type), or
+### Submit Behavior
+- Submit remains enabled; clicking Submit triggers client-side validation first.
+- If schema is invalid (0 fields, missing/duplicate names, unknown type):
+  - The request is not sent to the API.
+  - Inline errors are shown near affected inputs and a summary message is announced.
+- Submit is disabled only when:
   - API URL is empty, or
-  - A request is in flight (to prevent double submit).
-- Enabled otherwise.
+  - A request is in flight (to prevent double submit), or
+  - Total selected upload size exceeds the configured limit (UI warns near the cap).
 
 ## Request Construction
 - Prefer multipart/form-data when files are present; otherwise use application/json.
@@ -185,7 +188,7 @@ web/
 - With API_URL pointing at a live or local endpoint:
   - No files + JSON schema → ok=true, table renders columns.
   - One PDF + schema → ok=true.
-  - Invalid schema (e.g., duplicate names) → submit disabled with inline errors.
+  - Invalid schema (e.g., duplicate names) → clicking Submit blocks the request and shows inline errors.
   - Simulated server error (bad schema string) → error box with message and trace.
   - i18n: switch languages (EN/ES/IT) and verify all UI copy, placeholders, and validation messages update without page reload.
 

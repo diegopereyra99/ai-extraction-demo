@@ -77,12 +77,12 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
 - Single page with two panels split ~50/50.
 - Left: file picker (drag&drop and/or select), list with name/size/MIME, placeholder area for future viewer.
 - Right: schema builder (add field rows with Name, Required [default true], Description, Type), read-only JSON schema preview, Submit button, and results table or error box.
-- Disabled Submit until schema valid (and, optionally, at least one file when doing multipart).
+- Submit remains enabled; clicking Submit triggers client-side validation. If schema is invalid, the request is not sent and inline errors are shown. Submit is disabled only when API URL is empty, a request is in flight, or total selected upload size exceeds the configured limit.
 - Uses `config.js` for `API_URL`.
 - Includes a language switcher (EN/ES/IT) in the header. All labels, placeholders, and error messages localized.
 
 ## Acceptance (v0)
-- Can open the local web and submit to the endpoint with real small files and a flat schema; see a results table with one row using the schema columns; or a clear error message.
+- Can open the local web and submit to the endpoint with real small files and a flat schema; see a results table with one row using the schema columns in the builder’s order; or a clear error message.
 - Manual tests: see `docs/02-extract-api.md` and `tests/` scripts (local and deployed).
 - UI language can be switched between English, Spanish, and Italian at runtime, with updated labels, placeholders, and validation messages.
 

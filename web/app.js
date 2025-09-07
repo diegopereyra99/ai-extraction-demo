@@ -472,15 +472,21 @@
       result.innerHTML = `<div class="banner banner-error">${I18n.t('results.error')}</div>`;
       return;
     }
-    const keys = Object.keys(data);
+    // Render columns following the builder's field order; append any extra keys last
+    const fieldOrder = state.fields.map(f => (f && f.name) ? String(f.name) : '').filter(Boolean);
+    const dataKeys = Object.keys(data);
+    const orderedKeys = [
+      ...fieldOrder.filter(k => dataKeys.includes(k)),
+      ...dataKeys.filter(k => !fieldOrder.includes(k)),
+    ];
     const table = document.createElement('table');
     table.style.width = '100%'; table.style.borderCollapse = 'collapse';
     const th = document.createElement('tr');
-    keys.forEach(k => {
+    orderedKeys.forEach(k => {
       const c = document.createElement('th'); c.textContent = k; c.style.textAlign='left'; c.style.borderBottom='1px solid var(--border)'; c.style.padding='6px'; th.appendChild(c);
     });
     const tr = document.createElement('tr');
-    keys.forEach(k => {
+    orderedKeys.forEach(k => {
       const c = document.createElement('td'); c.textContent = data[k] === null ? 'null' : String(data[k]); c.style.padding='6px'; tr.appendChild(c);
     });
     const thead = document.createElement('thead'); thead.appendChild(th);

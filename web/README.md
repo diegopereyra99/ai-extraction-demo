@@ -40,8 +40,9 @@ python -m functions_framework --target=extract --port=8080 --debug
 ```
 
 ## Usage Tips
-- Start by adding at least one field; the Submit button enables when schema and config are valid.
+- Start by adding at least one field. Clicking Submit validates the schema client‑side; if invalid, the request is not sent and inline errors are shown.
 - If you add files, the app sends `multipart/form-data`; otherwise it sends a JSON body.
+- The Submit button is disabled only when API URL is missing, a request is in flight, or the total selected upload size exceeds the configured limit.
 - Switch languages from the header; the choice persists between sessions.
 - The app shows server errors and includes `trace_id` when available.
 
@@ -65,4 +66,3 @@ python -m functions_framework --target=extract --port=8080 --debug
 - Banner: "API_URL not configured" → copy `config.example.js` to `config.js` and set the URL.
 - CORS issues → ensure you are using a static server, not opening `index.html` from `file://`.
 - 413 payload too large → remove files or reduce size; consider GCS upload in a future version.
-
