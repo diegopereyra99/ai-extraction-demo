@@ -1,0 +1,35 @@
+{
+  "app": { "title": "Structured Extractor" },
+  "header": { "language": "Language" },
+  "files": {
+    "title": "Files",
+    "dropHint": "Drag & drop files here",
+    "select": "Select files"
+  },
+  "schema": {
+    "title": "Schema & Result",
+    "addField": "Add field",
+    "preview": "Schema (preview)",
+    "name": { "placeholder": "Field name" },
+    "description": { "placeholder": "Description (optional)" },
+    "type": {
+      "STRING": "String",
+      "NUMBER": "Number",
+      "BOOLEAN": "Boolean",
+      "DATE": "Date"
+    }
+  },
+  "inputs": {
+    "prompt": { "label": "Prompt", "placeholder": "Short instruction (optional)" },
+    "system": { "label": "System Instruction", "placeholder": "Default instructions if left empty" }
+  },
+  "model": { "label": "Model" },
+  "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },
+  "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace" },
+  "errors": { "configMissing": "API_URL not configured. Create web/config.js from config.example.js." },
+  "status": { "loading": "Loading...", "languageChanged": "Language updated" },
+  "defaults": {
+    "systemInstruction": "Do not make up data. Use null if information is missing. Respond strictly matching the provided schema."
+  }
+}
+

@@ -1,0 +1,35 @@
+{
+  "app": { "title": "Estrattore Strutturato" },
+  "header": { "language": "Lingua" },
+  "files": {
+    "title": "File",
+    "dropHint": "Trascina e rilascia i file qui",
+    "select": "Seleziona file"
+  },
+  "schema": {
+    "title": "Schema e Risultato",
+    "addField": "Aggiungi campo",
+    "preview": "Schema (anteprima)",
+    "name": { "placeholder": "Nome del campo" },
+    "description": { "placeholder": "Descrizione (opzionale)" },
+    "type": {
+      "STRING": "Testo",
+      "NUMBER": "Numero",
+      "BOOLEAN": "Booleano",
+      "DATE": "Data"
+    }
+  },
+  "inputs": {
+    "prompt": { "label": "Prompt", "placeholder": "Prompt breve (opzionale)" },
+    "system": { "label": "Istruzioni di sistema", "placeholder": "Istruzioni predefinite se lasciato vuoto" }
+  },
+  "model": { "label": "Modello" },
+  "actions": { "submit": "Invia", "clear": "Pulisci", "remove": "Rimuovi" },
+  "results": { "title": "Risultati", "ok": "Successo", "error": "Errore", "model": "Modello", "trace": "Trace" },
+  "errors": { "configMissing": "API_URL non configurato. Crea web/config.js da config.example.js." },
+  "status": { "loading": "Caricamento...", "languageChanged": "Lingua aggiornata" },
+  "defaults": {
+    "systemInstruction": "Non inventare dati. Usa null se mancano informazioni. Rispondi seguendo rigorosamente lo schema fornito."
+  }
+}
+

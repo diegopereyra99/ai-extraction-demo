@@ -1,0 +1,35 @@
+{
+  "app": { "title": "Extractor Estructurado" },
+  "header": { "language": "Idioma" },
+  "files": {
+    "title": "Archivos",
+    "dropHint": "Arrastra y suelta archivos aquí",
+    "select": "Seleccionar archivos"
+  },
+  "schema": {
+    "title": "Esquema y Resultado",
+    "addField": "Agregar campo",
+    "preview": "Esquema (vista previa)",
+    "name": { "placeholder": "Nombre del campo" },
+    "description": { "placeholder": "Descripción (opcional)" },
+    "type": {
+      "STRING": "Texto",
+      "NUMBER": "Número",
+      "BOOLEAN": "Booleano",
+      "DATE": "Fecha"
+    }
+  },
+  "inputs": {
+    "prompt": { "label": "Prompt", "placeholder": "Prompt breve (opcional)" },
+    "system": { "label": "Instrucción del sistema", "placeholder": "Instrucciones por defecto si se deja vacío" }
+  },
+  "model": { "label": "Modelo" },
+  "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar" },
+  "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza" },
+  "errors": { "configMissing": "API_URL no configurada. Crea web/config.js desde config.example.js." },
+  "status": { "loading": "Cargando...", "languageChanged": "Idioma actualizado" },
+  "defaults": {
+    "systemInstruction": "No inventes datos. Usa null si falta información. Responde exactamente con el esquema proporcionado."
+  }
+}
+
