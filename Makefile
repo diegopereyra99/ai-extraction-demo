@@ -96,6 +96,11 @@ url-api: check-env
 deploy-frontend:
 	@echo "⚠️  Frontend deployment not yet implemented."
 
+.PHONY: serve-web
+serve-web:
+	@echo "Serving ./web at http://localhost:5173"
+	python3 -m http.server 5173 --directory web
+
 # ---------- Meta ----------
 .PHONY: help
 help:
@@ -106,3 +111,4 @@ help:
 	@echo "  make logs-api        Tail logs"
 	@echo "  make url-api         Print function URL"
 	@echo "  make check-env       Verify env file is configured"
+	@echo "  make serve-web       Serve the local webapp from ./web"

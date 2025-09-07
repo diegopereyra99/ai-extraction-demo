@@ -33,3 +33,6 @@ tmp/
 *.json
 *.jpg
 
+# Config
+web/config.js
+.env.yaml

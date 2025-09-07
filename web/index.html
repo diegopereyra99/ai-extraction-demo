@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="app.title">Structured Extractor</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="configWarning" class="banner banner-warn" hidden></div>
+
+    <header class="topbar">
+      <h1 class="app-title" data-i18n="app.title">Structured Extractor</h1>
+      <div class="spacer"></div>
+      <label for="langSelect" class="label" data-i18n="header.language">Language</label>
+      <select id="langSelect" aria-label="Language selector">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+      </select>
+    </header>
+
+    <main class="container">
+      <section class="panel" aria-labelledby="filesHeading">
+        <h2 id="filesHeading" data-i18n="files.title">Files</h2>
+        <div id="dropzone" class="dropzone" aria-label="Dropzone">
+          <p data-i18n="files.dropHint">Drag & drop files here</p>
+        </div>
+        <div class="controls">
+          <button id="selectFilesBtn" data-i18n="files.select">Select files</button>
+          <input id="fileInput" type="file" multiple hidden />
+        </div>
+        <ul id="fileList" class="file-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="panel" aria-labelledby="schemaHeading">
+        <h2 id="schemaHeading" data-i18n="schema.title">Schema & Result</h2>
+        <div class="schema-builder">
+          <div class="row">
+            <button id="addFieldBtn" data-i18n="schema.addField">Add field</button>
+          </div>
+          <div id="fieldsContainer" class="fields"></div>
+          <div class="row">
+            <h3 data-i18n="schema.preview">Schema (preview)</h3>
+            <pre id="schemaPreview" class="preview"></pre>
+          </div>
+        </div>
+        <div class="inputs">
+          <label for="promptInput" data-i18n="inputs.prompt.label">Prompt</label>
+          <input id="promptInput" type="text" data-i18n-placeholder="inputs.prompt.placeholder" />
+
+          <label for="systemInput" data-i18n="inputs.system.label">System Instruction</label>
+          <textarea id="systemInput" rows="4" data-i18n-placeholder="inputs.system.placeholder"></textarea>
+
+          <label for="modelSelect" data-i18n="model.label">Model</label>
+          <select id="modelSelect">
+            <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" class="primary" disabled data-i18n="actions.submit">Submit</button>
+          <button id="clearBtn" data-i18n="actions.clear">Clear</button>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <div id="result" class="result"></div>
+      </section>
+    </main>
+
+    <div id="ariaStatus" class="sr-only" aria-live="polite"></div>
+
+    <script src="./i18n.js"></script>
+    <script src="./config.js" defer></script>
+    <script src="./app.js"></script>
+  </body>
+  </html>
+
