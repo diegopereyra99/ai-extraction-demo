@@ -30,6 +30,7 @@
           <button id="selectFilesBtn" data-i18n="files.select">Select files</button>
           <input id="fileInput" type="file" multiple hidden />
         </div>
+        <div id="fileSizeInfo" class="status" aria-live="polite"></div>
         <ul id="fileList" class="file-list" aria-live="polite"></ul>
       </section>
 
@@ -40,6 +41,7 @@
             <button id="addFieldBtn" data-i18n="schema.addField">Add field</button>
           </div>
           <div id="fieldsContainer" class="fields"></div>
+          <div id="schemaErrors" class="status" role="status" aria-live="polite"></div>
           <div class="row">
             <h3 data-i18n="schema.preview">Schema (preview)</h3>
             <pre id="schemaPreview" class="preview"></pre>
@@ -75,4 +77,3 @@
     <script src="./app.js"></script>
   </body>
   </html>
-

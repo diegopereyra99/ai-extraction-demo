@@ -72,10 +72,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .controls { margin-top: 12px; display: flex; gap: 8px; }
 .file-list { list-style: none; padding: 0; margin: 12px 0 0; }
 .file-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.file-list button { width: 32px; }
 
 .schema-builder .row { margin: 12px 0; }
 .fields { display: grid; gap: 8px; }
 .field-row { display: grid; grid-template-columns: 2fr 1fr 2fr 1fr auto; gap: 8px; align-items: center; }
+.field-error { color: var(--error); font-size: 12px; grid-column: 1 / -1; }
+.invalid { border-color: var(--error) !important; }
 @media (max-width: 900px) {
   .field-row { grid-template-columns: 1fr; }
 }
@@ -92,6 +95,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .inputs { display: grid; gap: 8px; margin-top: 16px; }
 .actions { display: flex; gap: 8px; margin-top: 12px; }
 .status { margin-top: 8px; color: var(--muted); }
+.status.warn { color: var(--warn); }
+.status.error { color: var(--error); }
+.dropzone.error { border-color: var(--error); color: var(--error); }
 .result { margin-top: 12px; }
 
 .banner { padding: 10px 16px; border-bottom: 1px solid var(--border); }
@@ -99,4 +105,3 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .banner-error { background: rgba(239, 68, 68, 0.12); color: #f87171; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-

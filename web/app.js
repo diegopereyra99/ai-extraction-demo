@@ -7,6 +7,8 @@
     systemInstruction: '',
     model: 'gemini-2.5-flash',
     loading: false,
+    errors: { fields: [], global: [] },
+    sizeOverLimit: false,
   };
 
   function $(id) { return document.getElementById(id); }
@@ -36,6 +38,22 @@
     const selectBtn = $('selectFilesBtn');
     const list = $('fileList');
 
+    function totalBytes() { return state.files.reduce((s,f)=>s+Number(f.size||0),0); }
+    function human(bytes){ if(bytes<1024) return `${bytes} B`; const kb=bytes/1024; if(kb<1024) return `${kb.toFixed(1)} KB`; const mb=kb/1024; return `${mb.toFixed(2)} MB`; }
+    function getLimit() { return Number(window.APP_CONFIG?.MAX_TOTAL_UPLOAD_BYTES || 20*1024*1024); }
+    function renderSizeInfo(){
+      const el = $('fileSizeInfo');
+      const limit = getLimit();
+      const bytes = totalBytes();
+      const over = bytes > limit;
+      const warn = !over && bytes > 0.8*limit;
+      state.sizeOverLimit = over;
+      el.className = `status${over ? ' error' : warn ? ' warn' : ''}`;
+      const note = over ? ` — ${I18n.t('errors.sizeExceeded')}` : warn ? ` — ${I18n.t('errors.sizeWarning')}` : '';
+      el.textContent = `${human(bytes)} / ${human(limit)}${note}`;
+      const drop = $('dropzone');
+      if (drop) { if (over) drop.classList.add('error'); else drop.classList.remove('error'); }
+    }
     function renderList() {
       list.innerHTML = '';
       state.files.forEach((f, i) => {
@@ -44,10 +62,12 @@
         const right = document.createElement('button');
         left.textContent = `${f.name} — ${(f.size/1024).toFixed(1)} KB`;
         right.textContent = '×';
-        right.setAttribute('aria-label', 'Remove');
-        right.addEventListener('click', () => { state.files.splice(i,1); renderList(); });
+        right.setAttribute('aria-label', I18n.t('actions.remove'));
+        right.title = I18n.t('actions.remove');
+        right.addEventListener('click', () => { state.files.splice(i,1); renderList(); renderSizeInfo(); maybeEnableSubmit(); });
         li.appendChild(left); li.appendChild(right); list.appendChild(li);
       });
+      renderSizeInfo();
     }
 
     ['dragenter','dragover'].forEach(evt => drop.addEventListener(evt, (e) => {
@@ -58,15 +78,14 @@
     }));
     drop.addEventListener('drop', (e) => {
       const items = e.dataTransfer?.files || [];
+      // Allow adding, but enforce block on submit; optionally, block additions if exceeding
       state.files.push(...items);
-      renderList();
-      maybeEnableSubmit();
+      renderList(); renderSizeInfo(); maybeEnableSubmit();
     });
     input.addEventListener('change', () => {
       state.files.push(...input.files);
       input.value = '';
-      renderList();
-      maybeEnableSubmit();
+      renderList(); renderSizeInfo(); maybeEnableSubmit();
     });
     selectBtn.addEventListener('click', () => input.click());
   }
@@ -80,7 +99,7 @@
       return { id: crypto.randomUUID(), name: '', required: true, description: '', type: 'STRING' };
     }
 
-    function renderFields() {
+    function renderFields(focusNew = false) {
       fieldsEl.innerHTML = '';
       state.fields.forEach((fld, idx) => {
         const row = document.createElement('div');
@@ -108,11 +127,17 @@
         req.addEventListener('change', () => { fld.required = req.checked; updatePreview(); });
 
         const del = document.createElement('button');
-        del.textContent = '×'; del.title = I18n.t('actions.remove');
-        del.addEventListener('click', () => { state.fields.splice(idx,1); renderFields(); updatePreview(); });
+        del.textContent = '×'; del.title = I18n.t('actions.remove'); del.setAttribute('aria-label', I18n.t('actions.remove'));
+        del.addEventListener('click', () => {
+          state.fields.splice(idx,1);
+          renderFields(); updatePreview();
+          const addBtn = document.getElementById('addFieldBtn');
+          if (addBtn) addBtn.focus();
+        });
 
         row.append(name, type, desc, req, del);
         fieldsEl.appendChild(row);
+        if (focusNew && idx === state.fields.length - 1) { name.focus(); }
       });
     }
 
@@ -141,18 +166,59 @@
       maybeEnableSubmit();
     }
 
-    addBtn.addEventListener('click', () => { state.fields.push(makeField()); renderFields(); updatePreview(); });
+    addBtn.addEventListener('click', () => { state.fields.push(makeField()); renderFields(true); updatePreview(); });
     // Start with one field for UX
     state.fields.push(makeField());
     renderFields();
     updatePreview();
   }
 
+  function validateSchema() {
+    const seen = new Set();
+    const fieldErrs = [];
+    let hasAny = false;
+    state.fields.forEach((f) => { if (f.name && ['STRING','NUMBER','BOOLEAN','DATE'].includes(f.type)) hasAny = true; });
+    state.fields.forEach((f) => {
+      const errs = [];
+      const name = (f.name || '').trim();
+      if (!name) errs.push('errors.nameRequired');
+      const key = name.toLowerCase();
+      if (name && seen.has(key)) errs.push('errors.duplicateName');
+      seen.add(key);
+      fieldErrs.push(errs);
+    });
+    const global = [];
+    if (!hasAny) global.push('errors.noFields');
+    state.errors = { fields: fieldErrs, global };
+    applyFieldErrorStyles();
+    const g = document.getElementById('schemaErrors');
+    const fieldMsgKeys = fieldErrs.flat();
+    const allKeys = [...new Set([...global, ...fieldMsgKeys])];
+    const text = allKeys.map(k => I18n.t(k)).join(' · ');
+    g.className = `status${text ? ' error':''}`;
+    g.textContent = text ? `${I18n.t('errors.pleaseFix')}: ${text}` : '';
+  }
+
+  function applyFieldErrorStyles() {
+    const rows = document.querySelectorAll('#fieldsContainer .field-row');
+    rows.forEach((row, idx) => {
+      const nameInput = row.querySelector('input[type="text"], input:not([type])');
+      const hasErr = (state.errors.fields[idx] || []).length > 0;
+      if (nameInput) {
+        if (hasErr) nameInput.classList.add('invalid'); else nameInput.classList.remove('invalid');
+      }
+    });
+  }
+
   function maybeEnableSubmit() {
     const btn = $('submitBtn');
-    const valid = state.fields.some(f => f.name && ['STRING','NUMBER','BOOLEAN','DATE'].includes(f.type));
     const hasApi = !!(window.APP_CONFIG && window.APP_CONFIG.API_URL);
-    btn.disabled = !(valid && hasApi && !state.loading);
+    const disabled = !(hasApi && !state.loading) || state.sizeOverLimit;
+    btn.disabled = disabled;
+    btn.title = disabled ? [
+      !hasApi ? I18n.t('errors.configMissing') : '',
+      state.sizeOverLimit ? I18n.t('errors.sizeExceeded') : ''
+    ].filter(Boolean).join(' · ') : '';
   }
 
   function initActions() {
@@ -182,6 +248,21 @@
     const locale = localeSel ? localeSel.value : 'en';
 
     try {
+      // Validate once on submit; if invalid, show errors and abort request
+      if (state.sizeOverLimit) {
+        status.textContent = '';
+        return;
+      }
+      validateSchema();
+      const hasFieldErrs = state.errors.fields.some(arr => arr.length > 0);
+      const hasGlobalErrs = state.errors.global.length > 0;
+      if (hasFieldErrs || hasGlobalErrs) {
+        status.textContent = '';
+        // Keep focus on first invalid field if any
+        const firstInvalid = document.querySelector('#fieldsContainer .invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
       let resp;
       if (state.files.length > 0) {
         const fd = new FormData();
@@ -250,4 +331,3 @@
     initActions();
   });
 })();
-

@@ -26,10 +26,17 @@
   "model": { "label": "Modelo" },
   "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar" },
   "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza" },
-  "errors": { "configMissing": "API_URL no configurada. Crea web/config.js desde config.example.js." },
+  "errors": {
+    "configMissing": "API_URL no configurada. Crea web/config.js desde config.example.js.",
+    "nameRequired": "El nombre es obligatorio",
+    "duplicateName": "Los nombres de campo deben ser únicos",
+    "noFields": "Agrega al menos un campo",
+    "sizeWarning": "Tamaño total grande; puede alcanzar el límite del servidor",
+    "sizeExceeded": "El tamaño total supera el límite permitido",
+    "pleaseFix": "Corrige los campos marcados"
+  },
   "status": { "loading": "Cargando...", "languageChanged": "Idioma actualizado" },
   "defaults": {
     "systemInstruction": "No inventes datos. Usa null si falta información. Responde exactamente con el esquema proporcionado."
   }
 }
-

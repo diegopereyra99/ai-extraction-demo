@@ -26,10 +26,17 @@
   "model": { "label": "Model" },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },
   "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace" },
-  "errors": { "configMissing": "API_URL not configured. Create web/config.js from config.example.js." },
+  "errors": {
+    "configMissing": "API_URL not configured. Create web/config.js from config.example.js.",
+    "nameRequired": "Name is required",
+    "duplicateName": "Field names must be unique",
+    "noFields": "Add at least one field",
+    "sizeWarning": "Large total upload size; may hit server limit",
+    "sizeExceeded": "Total upload size exceeds the allowed limit",
+    "pleaseFix": "Please fix the highlighted fields"
+  },
   "status": { "loading": "Loading...", "languageChanged": "Language updated" },
   "defaults": {
     "systemInstruction": "Do not make up data. Use null if information is missing. Respond strictly matching the provided schema."
   }
 }
-
