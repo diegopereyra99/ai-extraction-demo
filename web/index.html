@@ -18,6 +18,7 @@
         <option value="es">Español</option>
         <option value="it">Italiano</option>
       </select>
+      <button id="helpBtn" class="icon-btn" aria-haspopup="dialog" aria-label="Help" title="Help" data-i18n-aria-label="header.help" data-i18n-title="header.help">?</button>
     </header>
 
     <main class="container">
@@ -96,7 +97,35 @@
       </div>
     </main>
 
+    <div class="site-footer">
+      <span class="cta" data-i18n="footer.cta">Need to integrate this into your system? Contact:</span>
+      <div class="contact">
+        <a class="contact-item email" href="mailto:diego.pereyra99@gmail.com">diego.pereyra99@gmail.com</a>
+        <a class="contact-item phone" href="tel:+33752050377">+33 7 52 05 03 77</a>
+      </div>
+    </div>
+
     <div id="ariaStatus" class="sr-only" aria-live="polite"></div>
+
+    <!-- Help modal -->
+    <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="modal-backdrop" data-close="help"></div>
+      <div class="modal-content" role="document">
+        <div class="modal-header">
+          <h3 id="helpTitle" data-i18n="help.title">How to use</h3>
+          <button id="helpClose" class="icon-btn" aria-label="Close" title="Close" data-i18n-aria-label="actions.close" data-i18n-title="actions.close">×</button>
+        </div>
+        <div class="modal-body">
+          <ul class="help-list">
+            <li data-i18n="help.steps.config">Set API_URL in config.js (copy from config.example.js).</li>
+            <li data-i18n="help.steps.fields">Add at least one field to the schema (Name, Type, Required).</li>
+            <li data-i18n="help.steps.files">Optionally add files; multipart is used when files are present.</li>
+            <li data-i18n="help.steps.submit">Click Submit. The app validates the schema; if invalid, it shows inline errors and does not send the request.</li>
+            <li data-i18n="help.steps.limits">Keep total upload size small (≈ &lt;20MB). The UI warns when near the limit.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <script src="./i18n.js"></script>
     <script src="./config.js" defer></script>

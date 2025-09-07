@@ -1,6 +1,6 @@
 {
   "app": { "title": "Extractor Estructurado" },
-  "header": { "language": "Idioma" },
+  "header": { "language": "Idioma", "help": "Ayuda" },
   "files": {
     "title": "Archivos",
     "dropHint": "Arrastra y suelta archivos aquí o haz clic para seleccionar",
@@ -37,7 +37,17 @@
     "system": { "label": "Instrucción del sistema", "placeholder": "No inventes datos. Usa null si falta información. Sigue estrictamente el esquema JSON proporcionado." }
   },
   "model": { "label": "Modelo" },
-  "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar" },
+  "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar", "close": "Cerrar" },
+  "help": {
+    "title": "Cómo usar",
+    "steps": {
+      "config": "Esta herramienta extrae información específica de tus archivos y la muestra en una tabla simple.",
+      "fields": "Indica qué necesitas agregando campos (por ejemplo: Número de factura, Fecha, Total).",
+      "files": "Añade tus documentos (PDFs o imágenes) en el panel izquierdo.",
+      "submit": "Haz clic en Enviar para extraer. Si falta algo o hay un problema, la app te lo indicará.",
+      "limits": "Puedes cambiar los campos y enviar de nuevo; la tabla se actualiza al instante."
+    }
+  },
   "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza" },
   "errors": {
     "configMissing": "API_URL no configurada. Crea web/config.js desde config.example.js.",
@@ -52,4 +62,6 @@
   "defaults": {
     "systemInstruction": "No inventes datos. Usa null si falta información. Responde exactamente con el esquema proporcionado."
   }
+  ,
+  "footer": { "cta": "¿Necesitas integrarlo en tu sistema? Contacto:" }
 }

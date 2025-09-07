@@ -1,6 +1,6 @@
 {
   "app": { "title": "Structured Extractor" },
-  "header": { "language": "Language" },
+  "header": { "language": "Language", "help": "Help" },
   "files": {
     "title": "Files",
     "dropHint": "Drag & drop files here or click to select",
@@ -38,6 +38,17 @@
   },
   "model": { "label": "Model" },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },
+  "help": {
+    "title": "How to use",
+    "steps": {
+      "config": "This tool extracts specific information from your files into a simple table.",
+      "fields": "Tell it what you need by adding fields (for example: Invoice number, Date, Total).",
+      "files": "Add your documents (PDFs or images) on the left.",
+      "submit": "Click Submit to extract. If something’s missing or unclear, the app will ask you to fix it.",
+      "limits": "You can change the fields and submit again; the table updates to match."
+    }
+  },
+  "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove", "close": "Close" },
   "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace" },
   "errors": {
     "configMissing": "API_URL not configured. Create web/config.js from config.example.js.",
@@ -52,4 +63,6 @@
   "defaults": {
     "systemInstruction": "Do not make up data. Use null if information is missing. Respond strictly matching the provided schema."
   }
+  ,
+  "footer": { "cta": "Need to integrate this into your system? Contact me:" }
 }

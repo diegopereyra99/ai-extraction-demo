@@ -504,6 +504,35 @@
     initLanguage();
     initFiles();
     initSchema();
+    // Help modal
+    const helpBtn = document.getElementById('helpBtn');
+    const helpModal = document.getElementById('helpModal');
+    const helpClose = document.getElementById('helpClose');
+    let lastFocus = null;
+    function openHelp() {
+      if (!helpModal) return;
+      lastFocus = document.activeElement;
+      helpModal.classList.remove('hidden');
+      if (helpClose) helpClose.focus();
+    }
+    function closeHelp() {
+      if (!helpModal) return;
+      helpModal.classList.add('hidden');
+      if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch {} }
+    }
+    if (helpBtn) helpBtn.addEventListener('click', openHelp);
+    if (helpClose) helpClose.addEventListener('click', closeHelp);
+    if (helpModal) {
+      helpModal.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target && target.getAttribute && target.getAttribute('data-close') === 'help') {
+          closeHelp();
+        }
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeHelp();
+    });
     // Collapsible advanced config toggle
     const toggle = document.getElementById('advancedToggle');
     const panel = document.getElementById('advancedPanel');
