@@ -1,4 +1,6 @@
-# Gemini Structured Extractor (demo limpia, frontend lightweight)
+# Gemini Structured Extractor (system spec)
+
+Note: This document is superseded by the English system spec at `docs/00-system-spec.md`. The frontend/webapp now has its own detailed spec at `docs/webapp-spec.md`. Keeping this file for historical context.
 
 ## 1) Objetivo
 - **Backend**: una Cloud Function (Gen2) con un único endpoint HTTP `/extract` que acepta archivos + prompt + system instruction + schema y devuelve JSON estructurado usando Gemini (vía **Vertex AI** con **service account**).
@@ -199,4 +201,3 @@ web/
 3. **V3 — Validación**: `jsonschema` server-side para rechazar o corregir formatos; normalización de fechas/monedas.  
 4. **V3 — UX**: exportar CSV/JSON; recordar últimos esquemas en `localStorage`.  
 5. **V4 — Operación**: auth básica del endpoint, rate-limits, métricas y logs estructurados, selección de modelo, canary.
-

@@ -1,18 +1,18 @@
 {
-    "type": "object",
+    "type": "OBJECT",
     "title": "User profile",
     "description": "Basic account info",
     "properties": {
       "id": {
         "type": "string",
-        "format": "uuid",
         "description": "Unique user identifier"
       },
       "email": {
         "type": "string",
         "format": "email",
         "description": "User email address",
-        "example": "alice@example.com"
+        "example": "alice@example.com",
+        "nullable": true
       },
       "birth_date": {
         "type": "string",
@@ -20,17 +20,22 @@
         "nullable": true,
         "description": "Date of birth (YYYY-MM-DD)"
       },
+      "full_name": {
+        "type": "string",
+        "description": "Full name: first and last name"
+      },
       "roles": {
         "type": "array",
-        "items": { "type": "string", "enum": ["admin", "user", "guest"] },
-        "minItems": 1
+        "items": {"type": "string", "enum": ["admin", "user", "guest"] },
+        "minItems": 1,
+        "nullable": true
       },
       "age": {
         "type": "integer",
         "minimum": 0,
-        "maximum": 120
+        "maximum": 120,
+        "description": "User age today"
       }
     },
     "required": ["id", "email"]
   }
-

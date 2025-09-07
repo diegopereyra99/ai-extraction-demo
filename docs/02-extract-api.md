@@ -18,6 +18,7 @@ Quick Test
   - system_instruction: string (optional; defaults to the built-in message)
   - schema: string (JSON) — flat OBJECT schema with properties and required
   - model: string (optional; default: gemini-2.5-flash)
+  - locale: string (optional; one of `en`, `es`, `it`). Ignored by v0 server; reserved for future.
 
 Use a schema file from `examples/schemas/` (example: profile):
 ```bash
@@ -37,6 +38,7 @@ curl -s -X POST http://localhost:8080/extract \
   - system_instruction: string (optional; see default above)
   - schema: string (JSON)
   - model: string (optional)
+  - locale: string (optional)
 
 Example (multipart) using files from `examples/files/` and a schema from `examples/schemas/`:
 ```bash
@@ -44,6 +46,7 @@ curl -s -X POST http://localhost:8080/extract \
   -H 'Content-Type: multipart/form-data' \
   -F 'prompt=Extract fields from invoice' \
   -F "schema=$(< examples/schemas/invoice.json)" \
+  -F 'locale=en' \
   -F 'files[]=@examples/files/invoice.pdf;type=application/pdf'
 ```
 
@@ -84,3 +87,4 @@ Example:
 - Set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT`, and `GOOGLE_CLOUD_LOCATION=europe-west4` to use Vertex AI.
 - This demo does not store files; it forwards content to the model (or stubs locally).
  - Deployment: copy `.env.yaml.example` to `.env.yaml`, edit values, then run `make enable-apis` (one-time) and `make deploy-api` from the repo root. Inspect `Makefile` for details.
+ - i18n: while the server currently ignores `locale`, the frontend uses it to localize UI copy. Serving the web via HTTP is required to fetch locale files.
