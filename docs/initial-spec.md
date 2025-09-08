@@ -12,7 +12,7 @@ Note: This document is superseded by the English system spec at `docs/system-spe
 - Un (1) endpoint; una (1) página web local.
 - **Sin frameworks** (no React/Vue; **solo HTML + CSS + JS**).
 - Archivos **pequeños** enviados **inline** (multipart/form-data).
-- Esquema **plano** (un nivel).
+- Backend: acepta cualquier esquema válido (objetos, arrays, anidado). Frontend: el creador de esquemas sigue siendo **plano** (un nivel) como simplificación de UI.
 - **Sin autenticación** del endpoint (demo temporal).
 - **Sin** hosting de la web (se corre local), y **sin** GCS aún (queda para V2).
 
@@ -50,7 +50,7 @@ gemini-extractor/
 - `files[]`: 0..N archivos pequeños (PDF/imagen).
 - `prompt`: string (breve).
 - `system_instruction`: string (por defecto: “No inventes datos. Usa null si falta info. Respeta el esquema.”).
-- `schema`: string con JSON del esquema **plano** (OpenAPI-like).
+ - `schema`: string con JSON del esquema de respuesta (OBJECT/ARRAY/primitivos; anidado permitido). La UI sigue generando un esquema plano como simplificación.
 - `model` (opcional): por defecto `gemini-2.5-flash`.
 - **Respuesta (application/json)**:
 - `ok` (bool),
@@ -140,7 +140,7 @@ web/
    - Presionar **Enviar**.  
    - Ver **tabla** con resultados o error.  
 
-## 8) Lógica declarativa (sin código) para esquema plano
+## 8) Lógica declarativa (sin código) para esquema plano (UI)
 - **Generación del schema** en la web (preview y payload):
   - Arranca como:
     ```

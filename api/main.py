@@ -98,16 +98,51 @@ def _server_error(message: str, trace_id: str) -> Tuple[Dict[str, Any], int, Dic
 
 
 def _parse_schema(schema_str: str) -> Dict[str, Any]:
+    """Parse and minimally validate a response schema.
+
+    API constraint: accept any valid schema shape (objects, arrays, nested),
+    and forward it unchanged to Gemini. Validation only checks that the schema
+    is present and structurally valid, without enforcing "flat" restrictions.
+    """
     try:
         schema = json.loads(schema_str)
     except Exception as e:  # invalid JSON
         raise ValueError(f"Invalid schema JSON: {e}")
 
-    # Minimal validation for flat schema
-    if not isinstance(schema, dict) or schema.get("type") != "OBJECT":
-        raise ValueError("Schema must be an OBJECT with properties")
-    if "properties" not in schema or not isinstance(schema["properties"], dict):
-        raise ValueError("Schema must include 'properties' object")
+    if not isinstance(schema, dict):
+        raise ValueError("Schema must be a JSON object")
+
+    def _validate(node: Dict[str, Any], path: str = "$") -> None:
+        if not isinstance(node, dict):
+            raise ValueError(f"Schema at {path} must be an object")
+        t = node.get("type")
+        if not isinstance(t, str):
+            raise ValueError(f"Missing or invalid 'type' at {path}")
+        t_upper = t.upper()
+        if t_upper == "OBJECT":
+            props = node.get("properties", {})
+            if props is not None and not isinstance(props, dict):
+                raise ValueError(f"'properties' at {path} must be an object")
+            req = node.get("required", None)
+            if req is not None:
+                if not isinstance(req, list) or not all(isinstance(x, str) for x in req):
+                    raise ValueError(f"'required' at {path} must be an array of strings")
+            for key, sub in (props or {}).items():
+                if not isinstance(sub, dict):
+                    raise ValueError(f"Property '{key}' at {path} must be an object")
+                _validate(sub, f"{path}.properties.{key}")
+        elif t_upper == "ARRAY":
+            items = node.get("items")
+            if not isinstance(items, dict):
+                raise ValueError(f"'items' at {path} must be an object schema")
+            _validate(items, f"{path}.items")
+        elif t_upper in {"STRING", "NUMBER", "BOOLEAN", "NULL"}:
+            # Primitive types: allow optional hints like description/format/enum
+            pass
+        else:
+            raise ValueError(f"Unsupported type '{t}' at {path}")
+
+    _validate(schema)
     return schema
 
 
@@ -183,18 +218,33 @@ def _maybe_call_vertex(prompt: str, system_instruction: str, schema_dict: Dict[s
     return data, usage
 
 
-def _stub_generate(schema_dict: Dict[str, Any]) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
-    props = schema_dict.get("properties", {})
-    for name, spec in props.items():
-        t = (spec or {}).get("type", "STRING").upper()
-        if t == "NUMBER":
-            out[name] = None
-        elif t == "BOOLEAN":
-            out[name] = None
-        else:
-            out[name] = None
-    return out
+def _stub_generate(schema_dict: Dict[str, Any]) -> Any:
+    """Generate a minimal stub matching the provided schema.
+
+    - OBJECT → dict with keys from properties; values are stubs
+    - ARRAY → empty list []
+    - STRING/NUMBER/BOOLEAN/NULL → None
+    """
+    def _gen(node: Dict[str, Any]) -> Any:
+        t = (node.get("type") or "STRING")
+        t_upper = t.upper() if isinstance(t, str) else "STRING"
+        if t_upper == "OBJECT":
+            out: Dict[str, Any] = {}
+            props = node.get("properties", {}) or {}
+            if isinstance(props, dict):
+                for k, v in props.items():
+                    if isinstance(v, dict):
+                        out[k] = _gen(v)
+                    else:
+                        out[k] = None
+            return out
+        if t_upper == "ARRAY":
+            # Minimal stub: empty array
+            return []
+        # Primitives
+        return None
+
+    return _gen(schema_dict)
 
 
 def extract(request):

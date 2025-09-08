@@ -66,5 +66,6 @@ tests/post_one.sh -u "$URL/extract" examples/files/invoice.pdf examples/schemas/
 ## Notes
 
 - CORS is enabled for demo (`*`). Tighten later if needed.
-- Local mode returns schema-shaped nulls unless Vertex AI is enabled.
+- Local mode returns a minimal JSON value shaped by the provided schema (objects with nested nulls, arrays as `[]`, primitives as `null`) unless Vertex AI is enabled.
 - The function uses the service account defined in `.env.yaml` (`SERVICE_ACCOUNT_ID`, default `gemini-extractor-sa`).
+- The API accepts any structurally valid schema (objects, arrays, nested) and forwards it unchanged to Gemini. The web UI remains flat-only as a simplification for authoring.

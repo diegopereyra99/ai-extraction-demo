@@ -3,15 +3,15 @@
 This document defines the v0 scope and acceptance criteria for the demo: a single HTTP extraction endpoint and a super‑light local webapp. It consolidates decisions from the original spec and reflects what’s implemented in the repo today.
 
 ## Goals
-- Backend: one Cloud Function (Gen2) with a single HTTP endpoint `/extract` that accepts small files + prompt + system instruction + flat schema, and returns structured JSON using Gemini via Vertex AI (service account) or a local stub.
-- Frontend: one static HTML page (no frameworks) with two panels: file picker/list (left) and schema builder + results (right).
+- Backend: one Cloud Function (Gen2) with a single HTTP endpoint `/extract` that accepts small files + prompt + system instruction + a response schema (objects/arrays/nested allowed), and returns structured JSON using Gemini via Vertex AI (service account) or a local stub.
+- Frontend: one static HTML page (no frameworks) with two panels: file picker/list (left) and a simplified flat-only schema builder + results (right).
 - Internationalization: UI supports English, Spanish, and Italian; users can switch language at runtime.
 
 ## Scope (v0)
 - One endpoint; one static page (served locally).
 - No auth (demo); CORS enabled for local use.
 - Files are uploaded inline (multipart/form-data); small total payload (≈ < 20 MB).
-- Flat schema (single level OBJECT with properties and required[]).
+- Backend accepts any valid schema (objects, arrays, nested). Frontend UI builds a flat schema only (single-level OBJECT) as a simplification.
 - No storage (no GCS) and no caching.
 - i18n: client-side only; UI copy localized (EN/ES/IT). Backend agnostic; may receive `locale` but not required to act on it in v0.
 
@@ -45,13 +45,13 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
   - `files[]`: 0..N small documents (PDF/image)
   - `prompt`: string
   - `system_instruction`: string (default: "Do not make up data. Use null if information is missing. Respond strictly matching the provided schema.")
-  - `schema`: string with JSON for a flat schema
+  - `schema`: string with JSON for a response schema (OBJECT/ARRAY/primitives; nesting allowed)
   - `model` (optional): defaults to `gemini-2.5-flash`
   - `locale` (optional): one of `en`, `es`, `it`. Ignored by v0 backend; reserved for future prompt tailoring.
 - Response (application/json):
   - `ok` (boolean)
   - `model` (string)
-  - `data` (object matching the provided schema shape)
+  - `data` (JSON value matching the provided schema shape)
   - `usage` (object: may include model metadata; stub includes a note)
   - `trace_id` (string)
   - `error` (string or null)
@@ -64,14 +64,12 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
 - CORS: enabled with `*` origin; allow `POST, OPTIONS` methods and `Content-Type, Authorization` headers.
 - Files: forwarded inline (no storage). Size checked against `MAX_TOTAL_UPLOAD_BYTES`.
 - Vertex path: when `GOOGLE_GENAI_USE_VERTEXAI=true` and SDK available, initializes Vertex with project/location; uses `response_mime_type=application/json` and `response_schema` when supported; includes `usage` metadata when provided by SDK.
-- Stub path: returns an object containing all schema property names with `null` values (for predictable UI testing).
+- Stub path: returns a minimal JSON value that matches the provided schema (objects with nested nulls, arrays as `[]`, primitives as `null`) for predictable testing.
 - i18n (client): translation files loaded over HTTP; UI updates dynamically on language switch; `document.lang` updated for screen readers.
 
-## Schema (flat)
-- Top-level: `{ "type": "OBJECT", "properties": { ... }, "required": [] }`.
-- Property types: `STRING`, `NUMBER`, `BOOLEAN`. Dates use `type: "STRING"` + `format": "date"` (the UI maps `DATE` selection to this).
-- Validation (server): minimal structural checks — must be OBJECT with `properties` object.
-- Validation (client): name required and unique; at least one field; types from allowed list; required defaults to true.
+## Schema
+- Backend: accepts any structurally valid schema (`OBJECT`, `ARRAY`, `STRING`, `NUMBER`, `BOOLEAN`, `NULL`) with nesting allowed. Minimal validation checks shape only (e.g., `properties` object for objects, `items` for arrays).
+- Frontend UI: generates a flat object schema only as a simplification. It enforces basic client-side rules (name required/unique; at least one field; limited type set; optional `DATE` mapped to `STRING` with `format: "date"`).
 
 ## Frontend (overview)
 - Single page with two panels split ~50/50.

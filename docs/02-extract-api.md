@@ -1,6 +1,6 @@
 # API — Documentation
 
-Scope: single HTTP endpoint to extract structured data using a flat schema. Supports JSON-only and multipart (with files). CORS enabled for demo.
+Scope: single HTTP endpoint to extract structured data. The backend accepts any valid response schema (objects, arrays, nested) and forwards it unchanged to Gemini. Supports JSON-only and multipart (with files). CORS enabled for demo.
 
 Quick Test
 - Ensure the server is running on `http://localhost:8080`.
@@ -16,7 +16,7 @@ Quick Test
 - Fields:
   - prompt: string (short instruction)
   - system_instruction: string (optional; defaults to the built-in message)
-  - schema: string (JSON) — flat OBJECT schema with properties and required
+  - schema: string (JSON) — response schema (OBJECT/ARRAY/primitives; nesting allowed)
   - model: string (optional; default: gemini-2.5-flash)
   - locale: string (optional; one of `en`, `es`, `it`). Ignored by v0 server; reserved for future.
 
@@ -53,7 +53,7 @@ curl -s -X POST http://localhost:8080/extract \
 ## Response (application/json)
 - ok: boolean
 - model: string
-- data: object (matches the provided schema shape)
+- data: JSON value matching the provided schema shape
 - usage: object (may include token metadata when using Vertex). In local stub mode includes `note`. If Vertex is requested but the SDK lacks schema support, the server still calls the model without `response_schema` and attempts to enforce shape via instructions.
 - trace_id: string (for debugging)
 - error: string | null
@@ -71,11 +71,10 @@ Example:
 ```
 
 ## Schema Notes
-- Top-level: `type` must be `OBJECT` with a flat `properties` object and a `required` array.
-- Property types: `STRING`, `NUMBER`, `BOOLEAN` (case-insensitive). Additional metadata like `description`, `title`, `example` are accepted and forwarded to the model when available.
-- Dates: prefer `{"type":"string","format":"date"}`. The legacy `{"type":"DATE"}` also works and maps to a date-formatted string.
-- Formats: `email`, `uuid`, and other string formats are allowed as hints. Arrays and nested objects are best-effort (enforced when the SDK supports response_schema), otherwise guided via instructions.
-- See updated samples under `examples/schemas/` for style.
+- The API accepts any structurally valid schema: `OBJECT` with `properties`, `ARRAY` with `items`, or primitive types (`STRING`, `NUMBER`, `BOOLEAN`, `NULL`). Nested objects/arrays are allowed.
+- Minimal validation is applied server-side: presence of `type` at each node; objects have `properties` objects (and optional `required` string array); arrays have an `items` schema.
+- Additional metadata like `description`, `title`, `example`, or string `format` (e.g., `date`) is forwarded as-is to Gemini.
+- The web app’s schema builder remains flat-only (single-level object) as a UI simplification; this constraint is not enforced by the API.
 
 ## Errors
 - 400: invalid or missing schema, malformed JSON, wrong method
