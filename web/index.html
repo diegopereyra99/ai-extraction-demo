@@ -15,13 +15,20 @@
         <p class="app-subtitle" data-i18n="app.subtitle">Extract structured data from files using a custom schema you define here. Demo app; more complex scenarios are possible.</p>
       </div>
       <div class="spacer"></div>
-      <label for="langSelect" class="label" data-i18n="header.language">Language</label>
+      <span class="label lang-ico" aria-hidden="true" title="Language" data-i18n-title="header.language">🌐</span>
       <select id="langSelect" aria-label="Language selector">
         <option value="en">English</option>
         <option value="es">Español</option>
         <option value="it">Italiano</option>
       </select>
-      <button id="helpBtn" class="icon-btn" aria-haspopup="dialog" aria-label="Help" title="Help" data-i18n-aria-label="header.help" data-i18n-title="header.help">?</button>
+      <button id="aboutBtn" class="icon-btn icon-text" aria-haspopup="dialog" aria-label="About this demo" title="About this demo" data-i18n-aria-label="about.title" data-i18n-title="about.title">
+        <span aria-hidden="true">ℹ️</span>
+        <span class="btn-label" data-i18n="header.info">Info</span>
+      </button>
+      <button id="helpBtn" class="icon-btn icon-text" aria-haspopup="dialog" aria-label="Help" title="Help" data-i18n-aria-label="header.help" data-i18n-title="header.help">
+        <span aria-hidden="true">❔</span>
+        <span class="btn-label" data-i18n="header.help">Help</span>
+      </button>
     </header>
 
     <main class="container">
@@ -126,6 +133,40 @@
             <li data-i18n="help.steps.submit">Click Submit. The app validates the schema; if invalid, it shows inline errors and does not send the request.</li>
             <li data-i18n="help.steps.limits">Keep total upload size small (≈ &lt;20MB). The UI warns when near the limit.</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- About modal -->
+    <div id="aboutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="modal-backdrop" data-close="about"></div>
+      <div class="modal-content" role="document">
+        <div class="modal-header">
+          <h3 id="aboutTitle" data-i18n="about.title">About this demo</h3>
+          <button id="aboutClose" class="icon-btn" aria-label="Close" title="Close" data-i18n-aria-label="actions.close" data-i18n-title="actions.close">×</button>
+        </div>
+        <div class="modal-body">
+          <p data-i18n="about.intro">This tool shows how AI can read your documents and turn them into clean, structured data. Upload a file, define the fields you need, and see the results instantly — no more copy-pasting or manual filling.</p>
+
+          <h3 data-i18n="about.files.title">What kind of files can I process?</h3>
+          <p data-i18n="about.files.intro">In this demo you can try PDFs and images — whether scanned or digital. Common examples include:</p>
+          <ul>
+            <li data-i18n="about.files.items.0">Invoices and receipts → totals, dates, VAT, vendor, product lines.</li>
+            <li data-i18n="about.files.items.1">CVs and résumés → names, contact details, skills.</li>
+            <li data-i18n="about.files.items.2">Product sheets → SKU, price, attributes.</li>
+          </ul>
+
+          <h3 data-i18n="about.workflow.title">How could this fit into your workflow?</h3>
+          <p data-i18n="about.workflow.intro">The same engine can be adapted in many ways, for example:</p>
+          <ul>
+            <li data-i18n="about.workflow.items.0">Watch a folder on your computer and automatically update a spreadsheet.</li>
+            <li data-i18n="about.workflow.items.1">Read your email inbox and process attachments as they arrive.</li>
+            <li data-i18n="about.workflow.items.2">Process a batch of files and create a new spreadsheet.</li>
+          </ul>
+
+          <h3 data-i18n="about.contact.title">Contact</h3>
+          <p data-i18n="about.contact.prompt">Interested in exploring how this could save you time?</p>
+          <p><a href="mailto:diego.pereyra99@gmail.com">diego.pereyra99@gmail.com</a><br/><a href="tel:+33752050377">+33 7 52 05 03 77</a></p>
         </div>
       </div>
     </div>

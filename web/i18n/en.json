@@ -3,7 +3,7 @@
     "title": "Structured Data Extractor",
     "subtitle": "Extract structured data from files using a custom schema you define here. Simplified demo for quick tests."
   },
-  "header": { "language": "Language", "help": "Help" },
+  "header": { "language": "Language", "help": "Help", "info": "Info" },
   "files": {
     "title": "Files",
     "dropHint": "Drag & drop files here or click to select",
@@ -44,11 +44,11 @@
   "help": {
     "title": "How to use",
     "steps": {
-      "config": "This tool extracts specific information from your files into a simple table.",
-      "fields": "Tell it what you need by adding fields (for example: Invoice number, Date, Total).",
-      "files": "Add your documents (PDFs or images) on the left.",
-      "submit": "Click Submit to extract. If something’s missing or unclear, the app will ask you to fix it.",
-      "limits": "You can change the fields and submit again; the table updates to match."
+      "config": "Add your files on the left (PDFs or images, scanned or digital).",
+      "fields": "Add the fields you want on the right (for example: Invoice number, Date, Total).",
+      "files": "Optionally add a description for each field if you need to specify details.",
+      "submit": "You can also add a prompt to give global context.",
+      "limits": "You may add system instructions. By default, if a value isn’t found it will be left empty rather than invented."
     }
   },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove", "close": "Close" },
@@ -67,5 +67,32 @@
     "systemInstruction": "Do not make up data. Use null if information is missing. Respond strictly matching the provided schema."
   }
   ,
-  "footer": { "cta": "Need to integrate this into your system? Contact me:" }
+  "footer": { "cta": "Limited demo for illustration. Need a full solution? Contact:" }
+  ,
+  "about": {
+    "title": "About this demo",
+    "intro": "This tool shows how AI can read your documents and turn them into clean, structured data. Upload a file, define the fields you need, and see the results instantly — no more copy-pasting or manual filling.",
+    "files": {
+      "title": "What kind of files can I process?",
+      "intro": "In this demo you can try PDFs and images — whether scanned or digital. Common examples include:",
+      "items": [
+        "Invoices and receipts → totals, dates, VAT, vendor, product lines.",
+        "CVs and résumés → names, contact details, skills.",
+        "Product sheets → SKU, price, attributes."
+      ]
+    },
+    "workflow": {
+      "title": "How could this fit into your workflow?",
+      "intro": "The same engine can be adapted in many ways, for example:",
+      "items": [
+        "Watch a folder on your computer and automatically update a spreadsheet.",
+        "Read your email inbox and process attachments as they arrive.",
+        "Process a batch of files and create a new spreadsheet."
+      ]
+    },
+    "contact": {
+      "title": "Contact",
+      "prompt": "Interested in exploring how this could save you time? Let's talk:"
+    }
+  }
 }

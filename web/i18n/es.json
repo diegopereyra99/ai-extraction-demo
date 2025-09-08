@@ -3,7 +3,7 @@
     "title": "Extractor de Datos Estructurados",
     "subtitle": "Extrae datos estructurados de archivos con un esquema personalizado. Demo simplificada para hacer pruebas simples."
   },
-  "header": { "language": "Idioma", "help": "Ayuda" },
+  "header": { "language": "Idioma", "help": "Ayuda", "info": "Info" },
   "files": {
     "title": "Archivos",
     "dropHint": "Arrastra y suelta archivos aquí o haz clic para seleccionar",
@@ -44,11 +44,11 @@
   "help": {
     "title": "Cómo usar",
     "steps": {
-      "config": "Esta herramienta extrae información específica de tus archivos y la muestra en una tabla simple.",
-      "fields": "Indica qué necesitas agregando campos (por ejemplo: Número de factura, Fecha, Total).",
-      "files": "Añade tus documentos (PDFs o imágenes) en el panel izquierdo.",
-      "submit": "Haz clic en Enviar para extraer. Si falta algo o hay un problema, la app te lo indicará.",
-      "limits": "Puedes cambiar los campos y enviar de nuevo; la tabla se actualiza al instante."
+      "config": "Añade tus archivos en el panel izquierdo (PDFs o imágenes, escaneadas o digitales).",
+      "fields": "Agrega los campos que quieras en la derecha (por ejemplo: Número de factura, Fecha, Total).",
+      "files": "Opcionalmente agrega una descripción a cada campo si necesitas especificar detalles.",
+      "submit": "También puedes añadir un prompt para dar contexto global.",
+      "limits": "Puedes añadir instrucciones del sistema. Por defecto, si un valor no se encuentra se deja vacío en lugar de inventarlo."
     }
   },
   "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza" },
@@ -66,5 +66,32 @@
     "systemInstruction": "No inventes datos. Usa null si falta información. Responde exactamente con el esquema proporcionado."
   }
   ,
-  "footer": { "cta": "¿Necesitas integrarlo en tu sistema? Contacto:" }
+  "footer": { "cta": "Demo limitada a modo de ejemplo. ¿Necesitas una solución completa? Contacto:" }
+  ,
+  "about": {
+    "title": "Acerca de esta demo",
+    "intro": "Esta herramienta muestra cómo la IA puede leer tus documentos y convertirlos en datos limpios y estructurados. Sube un archivo, define los campos que necesitas y ve los resultados al instante: sin copiar y pegar ni rellenar a mano.",
+    "files": {
+      "title": "¿Qué tipo de archivos puedo procesar?",
+      "intro": "En esta demo puedes probar con PDFs e imágenes — ya sean escaneados o digitales. Ejemplos comunes:",
+      "items": [
+        "Facturas y recibos → totales, fechas, IVA, proveedor, líneas de producto.",
+        "CVs y currículums → nombres, datos de contacto, habilidades.",
+        "Fichas de producto → SKU, precio, atributos."
+      ]
+    },
+    "workflow": {
+      "title": "¿Cómo encajaría en tu flujo de trabajo?",
+      "intro": "El mismo motor se puede adaptar de muchas formas, por ejemplo:",
+      "items": [
+        "Vigilar una carpeta en tu ordenador y actualizar automáticamente una hoja de cálculo.",
+        "Leer tu bandeja de entrada y procesar los adjuntos cuando lleguen.",
+        "Procesar un grupo de archivos y crear una hoja de cálculo nueva."
+      ]
+    },
+    "contact": {
+      "title": "Contacto",
+      "prompt": "¿Te interesa explorar cómo esto podría ahorrarte tiempo?"
+    }
+  }
 }

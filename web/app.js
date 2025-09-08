@@ -504,34 +504,42 @@
     initLanguage();
     initFiles();
     initSchema();
-    // Help modal
-    const helpBtn = document.getElementById('helpBtn');
-    const helpModal = document.getElementById('helpModal');
-    const helpClose = document.getElementById('helpClose');
-    let lastFocus = null;
-    function openHelp() {
-      if (!helpModal) return;
-      lastFocus = document.activeElement;
-      helpModal.classList.remove('hidden');
-      if (helpClose) helpClose.focus();
+    // Modal helpers (Help and About)
+    function setupModal(prefix) {
+      const btn = document.getElementById(`${prefix}Btn`);
+      const modal = document.getElementById(`${prefix}Modal`);
+      const close = document.getElementById(`${prefix}Close`);
+      let lastFocusEl = null;
+      function open() {
+        if (!modal) return;
+        lastFocusEl = document.activeElement;
+        modal.classList.remove('hidden');
+        if (close) close.focus();
+      }
+      function doClose() {
+        if (!modal) return;
+        modal.classList.add('hidden');
+        if (lastFocusEl && lastFocusEl.focus) { try { lastFocusEl.focus(); } catch {} }
+      }
+      if (btn) btn.addEventListener('click', open);
+      if (close) close.addEventListener('click', doClose);
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          const target = e.target;
+          if (target && target.getAttribute && target.getAttribute('data-close') === prefix) {
+            doClose();
+          }
+        });
+      }
+      return doClose;
     }
-    function closeHelp() {
-      if (!helpModal) return;
-      helpModal.classList.add('hidden');
-      if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch {} }
-    }
-    if (helpBtn) helpBtn.addEventListener('click', openHelp);
-    if (helpClose) helpClose.addEventListener('click', closeHelp);
-    if (helpModal) {
-      helpModal.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target && target.getAttribute && target.getAttribute('data-close') === 'help') {
-          closeHelp();
-        }
-      });
-    }
+    const closeHelp = setupModal('help');
+    const closeAbout = setupModal('about');
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeHelp();
+      if (e.key === 'Escape') {
+        if (typeof closeHelp === 'function') closeHelp();
+        if (typeof closeAbout === 'function') closeAbout();
+      }
     });
     // Collapsible advanced config toggle
     const toggle = document.getElementById('advancedToggle');
