@@ -258,6 +258,8 @@ button:active:not(:disabled) { transform: translateY(1px); opacity: 0.9; }
 .collapsible-header span:last-child { transition: transform 200ms ease; }
 .collapsible-header[aria-expanded="true"] span:last-child { transform: rotate(180deg); }
 .hidden { display: none; }
+/* Ensure modals truly hide even on mobile where .modal sets display:flex */
+.modal.hidden { display: none !important; }
 
 /* Modal */
 .modal { position: fixed; inset: 0; z-index: 1000; }
