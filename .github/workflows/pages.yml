@@ -24,28 +24,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Generate web/config.js from the secret
+      # Generate web/config.js from the repo secret
       - name: Create runtime config
         run: |
           mkdir -p web
-          cat > web/config.js <<'EOF'
-          window.APP_CONFIG = {
-            API_URL: "${{ secrets.PUBLIC_API_BASE }}"
-          };
-          EOF
+          printf '%s\n' \
+            "window.APP_CONFIG = {" \
+            "  API_URL: \"${{ secrets.PUBLIC_API_BASE }}\"" \
+            "};" > web/config.js
 
-      # Optional: copy a default 404.html for SPA routing (safe to skip)
+      # Create a simple SPA 404 fallback
       - name: Ensure SPA 404 fallback
         run: |
           if [ ! -f web/404.html ]; then
-            cat > web/404.html <<'EOF'
-            <!doctype html><meta charset="utf-8">
-            <script>
-              // GitHub Pages SPA redirect
-              sessionStorage.redirect = location.href;
-              location.replace("./");
-            </script>
-            EOF
+            printf '%s\n' \
+              '<!doctype html>' \
+              '<meta charset="utf-8">' \
+              '<script>' \
+              '  // GitHub Pages SPA redirect' \
+              '  sessionStorage.redirect = location.href;' \
+              '  location.replace("./");' \
+              '</script>' > web/404.html
           fi
 
       - name: Upload artifact
