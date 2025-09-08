@@ -669,12 +669,14 @@
         if (!modal) return;
         lastFocusEl = document.activeElement;
         modal.classList.remove('hidden');
+        try { modal.removeAttribute('hidden'); } catch {}
         lockBodyScroll();
         if (close) close.focus();
       }
       function doClose() {
         if (!modal) return;
         modal.classList.add('hidden');
+        try { modal.setAttribute('hidden', ''); } catch {}
         unlockBodyScroll();
         if (lastFocusEl && lastFocusEl.focus) { try { lastFocusEl.focus(); } catch {} }
       }
