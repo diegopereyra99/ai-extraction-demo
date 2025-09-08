@@ -86,6 +86,8 @@ button:active:not(:disabled) { transform: translateY(1px); opacity: 0.9; }
   border-radius: 10px;
   padding: 16px;
   transition: box-shadow 150ms ease, border-color 150ms ease;
+  /* Anchor for in-panel overlays like the file viewer */
+  position: relative;
 }
 .panel h2, .panel h3 { margin-top: 0; }
 
@@ -285,3 +287,44 @@ button:active:not(:disabled) { transform: translateY(1px); opacity: 0.9; }
 .modal-body ul { margin: 10px 0 14px 22px; }
 .modal-body li { line-height: 1.6; margin: 8px 0; }
 .modal-body .help-list li { margin: 10px 0; line-height: 1.6; }
+
+/* File viewer overlay (left column) */
+.file-viewer-overlay {
+  position: absolute;
+  inset: 0; /* fill the panel area */
+  z-index: 10; /* above list, below global modals */
+  background: #0c111a; /* match app dark tones */
+  border-radius: 10px; /* follow panel radius */
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+.file-viewer-overlay.hidden { display: none; }
+.file-viewer-overlay .fv-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+}
+.file-viewer-overlay .fv-body {
+  display: flex;
+  flex: 1 1 auto;
+  margin-top: 4px;
+  /* Reserve a bit for the close button */
+  padding: 32px 12px 12px 12px;
+  overflow: hidden;
+}
+.file-viewer-overlay .fv-body .fv-content {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* for images */
+  background: #0b0f17;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.file-viewer-overlay .fv-message {
+  color: var(--muted);
+  margin: auto;
+}

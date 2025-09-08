@@ -41,7 +41,11 @@
         <div id="fileSizeInfo" class="status" aria-live="polite"></div>
         <ul id="fileList" class="file-list" aria-live="polite"></ul>
 
-        
+        <!-- File viewer overlay (hidden by default). Covers only the left column panel. -->
+        <div id="fileViewerOverlay" class="file-viewer-overlay hidden" aria-hidden="true">
+          <button id="fileViewerClose" class="icon-btn fv-close" aria-label="Close preview" title="Close preview">×</button>
+          <div id="fileViewerContent" class="fv-body"></div>
+        </div>
       </section>
 
       <div class="right-col">

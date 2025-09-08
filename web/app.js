@@ -10,6 +10,7 @@
     errors: { fields: [], global: [] },
     sizeOverLimit: false,
     asList: false,
+    view: { open: false, url: null, kind: null, lastFocusEl: null },
   };
 
   function $(id) { return document.getElementById(id); }
@@ -45,6 +46,9 @@
     const drop = $('dropzone');
     const input = $('fileInput');
     const list = $('fileList');
+    const overlay = $('fileViewerOverlay');
+    const overlayContent = $('fileViewerContent');
+    const overlayClose = $('fileViewerClose');
 
     function totalBytes() { return state.files.reduce((s,f)=>s+Number(f.size||0),0); }
     function human(bytes){ if(bytes<1024) return `${bytes} B`; const kb=bytes/1024; if(kb<1024) return `${kb.toFixed(1)} KB`; const mb=kb/1024; return `${mb.toFixed(2)} MB`; }
@@ -159,6 +163,14 @@
         right.title = I18n.t('actions.remove');
         right.addEventListener('click', () => { state.files.splice(i,1); renderList(); renderSizeInfo(); maybeEnableSubmit(); });
         li.appendChild(left); li.appendChild(right); list.appendChild(li);
+
+        // Clicking the left side opens/replaces the preview overlay
+        left.tabIndex = 0;
+        left.setAttribute('role', 'button');
+        left.setAttribute('aria-label', `Preview ${f.name}`);
+        const openPreview = () => showPreview(f, kind, left);
+        left.addEventListener('click', openPreview);
+        left.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPreview(); } });
       });
       renderSizeInfo();
     }
@@ -184,6 +196,71 @@
     drop.addEventListener('click', () => input.click());
     drop.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
+
+    // Overlay helpers
+    function hideOverlay() {
+      if (!overlay) return;
+      overlay.classList.add('hidden');
+      overlay.setAttribute('aria-hidden', 'true');
+      if (overlayContent) overlayContent.innerHTML = '';
+      // Release any object URL if used
+      try { if (state.view && state.view.url) URL.revokeObjectURL(state.view.url); } catch {}
+      state.view.url = null;
+      state.view.open = false;
+      // Return focus to previously clicked file item, if any
+      try { if (state.view.lastFocusEl && state.view.lastFocusEl.focus) state.view.lastFocusEl.focus(); } catch {}
+    }
+
+    function showOverlay() {
+      if (!overlay) return;
+      overlay.classList.remove('hidden');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function showPreview(file, kind, sourceEl) {
+      if (!overlay || !overlayContent) return;
+      // If a previous URL exists, revoke it before replacing
+      try { if (state.view && state.view.url) URL.revokeObjectURL(state.view.url); } catch {}
+      state.view.lastFocusEl = sourceEl || null;
+      overlayContent.innerHTML = '';
+      let url = null;
+      if (kind === 'pdf' || kind === 'image') {
+        try { url = URL.createObjectURL(file); } catch {}
+      }
+      if (kind === 'pdf' && url) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'fv-content';
+        iframe.src = url;
+        iframe.title = `${file.name} preview`;
+        iframe.setAttribute('aria-label', `${file.name} preview`);
+        overlayContent.appendChild(iframe);
+      } else if (kind === 'image' && url) {
+        const img = document.createElement('img');
+        img.className = 'fv-content';
+        img.src = url;
+        img.alt = `${file.name} preview`;
+        overlayContent.appendChild(img);
+      } else {
+        const msg = document.createElement('div');
+        msg.className = 'fv-message';
+        msg.textContent = 'Preview not available';
+        overlayContent.appendChild(msg);
+      }
+      state.view.url = url;
+      state.view.open = true;
+      showOverlay();
+      // Move focus to close for accessibility
+      try { if (overlayClose) overlayClose.focus(); } catch {}
+    }
+
+    if (overlayClose) overlayClose.addEventListener('click', hideOverlay);
+    // Close with ESC at document level too
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && state.view && state.view.open) {
+        e.stopPropagation();
+        hideOverlay();
+      }
     });
   }
 
