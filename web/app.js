@@ -1,5 +1,17 @@
 // Minimal app bootstrap with config check and i18n wiring
 (function () {
+  // Helpers to lock/unlock body scroll when a modal is open (mobile)
+  let __scrollY = 0;
+  function lockBodyScroll() {
+    __scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.classList.add('has-modal');
+    document.body.style.top = `-${__scrollY}px`;
+  }
+  function unlockBodyScroll() {
+    document.body.classList.remove('has-modal');
+    document.body.style.top = '';
+    window.scrollTo(0, __scrollY);
+  }
   const state = {
     files: [],
     fields: [],
@@ -657,11 +669,13 @@
         if (!modal) return;
         lastFocusEl = document.activeElement;
         modal.classList.remove('hidden');
+        lockBodyScroll();
         if (close) close.focus();
       }
       function doClose() {
         if (!modal) return;
         modal.classList.add('hidden');
+        unlockBodyScroll();
         if (lastFocusEl && lastFocusEl.focus) { try { lastFocusEl.focus(); } catch {} }
       }
       if (btn) btn.addEventListener('click', open);
