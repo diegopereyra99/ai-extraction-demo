@@ -473,6 +473,26 @@
   function initActions() {
     $('clearBtn').addEventListener('click', () => {
       state.files = []; $('fileList').innerHTML='';
+      // Reset file size counter and related state
+      state.sizeOverLimit = false;
+      const sizeEl = $('fileSizeInfo');
+      const dropEl = $('dropzone');
+      if (dropEl) dropEl.classList.remove('error');
+      if (sizeEl) {
+        sizeEl.className = 'status';
+        const limit = Number(window.APP_CONFIG?.MAX_TOTAL_UPLOAD_BYTES || 20*1024*1024);
+        const human = (bytes) => {
+          if (!Number.isFinite(bytes)) return '';
+          if (bytes < 1024) return `${bytes} B`;
+          const kb = bytes / 1024;
+          if (kb < 1024) return `${(kb < 10 ? kb.toFixed(1) : Math.round(kb)).toString()} KB`;
+          const mb = kb / 1024;
+          if (mb < 1024) return `${(mb < 10 ? mb.toFixed(1) : Math.round(mb)).toString()} MB`;
+          const gb = mb / 1024;
+          return `${(gb < 10 ? gb.toFixed(1) : Math.round(gb)).toString()} GB`;
+        };
+        sizeEl.textContent = `${human(0)} / ${human(limit)}`;
+      }
       state.fields = [];
       $('schemaPreview').textContent='';
       $('promptInput').value=''; $('systemInput').value='';
