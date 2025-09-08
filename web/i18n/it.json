@@ -27,6 +27,7 @@
   "advanced": {
     "title": "Configurazione avanzata",
     "showPreview": "Mostra anteprima schema",
+    "extractAsList": "Estrai come elenco",
     "sections": {"prompt": "Prompt", "system": "Istruzioni di sistema", "model": "Modello", "options": "Opzioni"},
     "help": {
       "prompt": "Istruzione specifica del compito. Descrive cosa estrarre.",
@@ -51,7 +52,7 @@
       "limits": "Puoi aggiungere istruzioni di sistema. Per impostazione predefinita, se un valore non viene trovato viene lasciato vuoto e non inventato."
     }
   },
-  "results": { "title": "Risultati", "ok": "Successo", "error": "Errore", "model": "Modello", "trace": "Trace" },
+  "results": { "title": "Risultati", "ok": "Successo", "error": "Errore", "model": "Modello", "trace": "Trace", "empty": "Nessun risultato trovato." },
   "errors": {
     "configMissing": "API_URL non configurato. Crea web/config.js da config.example.js.",
     "nameRequired": "Il nome è obbligatorio",

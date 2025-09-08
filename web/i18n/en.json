@@ -27,6 +27,7 @@
   "advanced": {
     "title": "Advanced configuration",
     "showPreview": "Show schema preview",
+    "extractAsList": "Extract as list",
     "sections": {"prompt": "Prompt", "system": "System Instruction", "model": "Model", "options": "Options"},
     "help": {
       "prompt": "Task-specific instruction. Used to describe what to extract.",
@@ -52,7 +53,7 @@
     }
   },
   "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove", "close": "Close" },
-  "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace" },
+  "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace", "empty": "No results found." },
   "errors": {
     "configMissing": "API_URL not configured. Create web/config.js from config.example.js.",
     "nameRequired": "Name is required",

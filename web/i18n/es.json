@@ -27,6 +27,7 @@
   "advanced": {
     "title": "Configuración avanzada",
     "showPreview": "Mostrar vista previa del esquema",
+    "extractAsList": "Extraer como lista",
     "sections": {"prompt": "Prompt", "system": "Instrucción del sistema", "model": "Modelo", "options": "Opciones"},
     "help": {
       "prompt": "Instrucción específica de la tarea. Describe qué extraer.",
@@ -51,7 +52,7 @@
       "limits": "Puedes añadir instrucciones del sistema. Por defecto, si un valor no se encuentra se deja vacío en lugar de inventarlo."
     }
   },
-  "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza" },
+  "results": { "title": "Resultados", "ok": "Éxito", "error": "Error", "model": "Modelo", "trace": "Traza", "empty": "No se encontraron resultados." },
   "errors": {
     "configMissing": "API_URL no configurada. Crea web/config.js desde config.example.js.",
     "nameRequired": "El nombre es obligatorio",

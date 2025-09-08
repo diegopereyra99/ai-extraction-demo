@@ -9,6 +9,7 @@
     loading: false,
     errors: { fields: [], global: [] },
     sizeOverLimit: false,
+    asList: false,
   };
 
   function $(id) { return document.getElementById(id); }
@@ -333,8 +334,9 @@
     }
 
     function updatePreview() {
-      const schema = buildSchema();
-      preview.textContent = JSON.stringify(schema, null, 2);
+      const objSchema = buildSchema();
+      const effective = state.asList ? { type: 'ARRAY', items: objSchema } : objSchema;
+      preview.textContent = JSON.stringify(effective, null, 2);
       maybeEnableSubmit();
     }
 
@@ -468,12 +470,56 @@
   function renderResult(payload) {
     const { data, model, trace_id } = payload;
     const result = $('result');
-    if (!data || typeof data !== 'object') {
+    if (data == null) {
       result.innerHTML = `<div class="banner banner-error">${I18n.t('results.error')}</div>`;
       return;
     }
-    // Render columns following the builder's field order; append any extra keys last
     const fieldOrder = state.fields.map(f => (f && f.name) ? String(f.name) : '').filter(Boolean);
+    if (Array.isArray(data)) {
+      if (data.length === 0) {
+        result.innerHTML = `<div class="status">${I18n.t('results.empty')}</div>`;
+        return;
+      }
+      const allKeysSet = new Set();
+      data.forEach(row => { if (row && typeof row === 'object') Object.keys(row).forEach(k => allKeysSet.add(k)); });
+      const allKeys = Array.from(allKeysSet);
+      const orderedKeys = [
+        ...fieldOrder.filter(k => allKeys.includes(k)),
+        ...allKeys.filter(k => !fieldOrder.includes(k)),
+      ];
+      const table = document.createElement('table');
+      table.style.width = '100%'; table.style.borderCollapse = 'collapse';
+      const thead = document.createElement('thead');
+      const headTr = document.createElement('tr');
+      orderedKeys.forEach(k => {
+        const c = document.createElement('th'); c.textContent = k; c.style.textAlign='left'; c.style.borderBottom='1px solid var(--border)'; c.style.padding='6px'; headTr.appendChild(c);
+      });
+      thead.appendChild(headTr);
+      const tbody = document.createElement('tbody');
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        orderedKeys.forEach(k => {
+          const td = document.createElement('td');
+          const v = row && typeof row === 'object' ? row[k] : undefined;
+          td.textContent = v === null ? 'null' : v === undefined ? '' : String(v);
+          td.style.padding='6px';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.append(thead, tbody);
+      const meta = document.createElement('div');
+      meta.className = 'status';
+      meta.textContent = `${I18n.t('results.model')}: ${model} · ${I18n.t('results.trace')}: ${trace_id}`;
+      result.innerHTML = '';
+      result.appendChild(table);
+      result.appendChild(meta);
+      return;
+    }
+    if (typeof data !== 'object') {
+      result.innerHTML = `<div class="banner banner-error">${I18n.t('results.error')}</div>`;
+      return;
+    }
     const dataKeys = Object.keys(data);
     const orderedKeys = [
       ...fieldOrder.filter(k => dataKeys.includes(k)),
@@ -586,6 +632,33 @@
       prevToggle.addEventListener('change', () => {
         if (prevToggle.checked) prevBlock.classList.remove('hidden');
         else prevBlock.classList.add('hidden');
+      });
+    }
+    // Extract as list toggle
+    const asListToggle = document.getElementById('asListToggle');
+    if (asListToggle) {
+      asListToggle.checked = false;
+      state.asList = false;
+      asListToggle.addEventListener('change', () => {
+        state.asList = !!asListToggle.checked;
+        // Recompute preview to reflect wrapping/unwrapping
+        try {
+          const props = {};
+          const required = [];
+          for (const f of state.fields) {
+            if (!f || !f.name) continue;
+            const def = {};
+            if (f.type === 'DATE') { def.type = 'STRING'; def.format = 'date'; }
+            else { def.type = f.type; }
+            if (f.description) def.description = f.description;
+            props[f.name] = def;
+            if (f.required) required.push(f.name);
+          }
+          const objSchema = { type: 'OBJECT', properties: props, required: Array.from(new Set(required)) };
+          const effective = state.asList ? { type: 'ARRAY', items: objSchema } : objSchema;
+          const prev = document.getElementById('schemaPreview');
+          if (prev) prev.textContent = JSON.stringify(effective, null, 2);
+        } catch {}
       });
     }
     initActions();
