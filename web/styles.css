@@ -33,6 +33,7 @@ body {
 .title-group { display: flex; flex-direction: column; gap: 2px; }
 .app-subtitle { margin: 0; color: var(--muted); font-size: 14px; }
 .spacer { flex: 1; }
+.header-actions { display: inline-flex; align-items: center; gap: 12px; }
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -327,4 +328,25 @@ button:active:not(:disabled) { transform: translateY(1px); opacity: 0.9; }
 .file-viewer-overlay .fv-message {
   color: var(--muted);
   margin: auto;
+}
+
+/* --- Mobile adjustments (≤640px) --- */
+@media (max-width: 640px) {
+  /* Header layout: title above, controls row below */
+  .topbar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .title-group { order: 0; width: 100%; text-align: center; }
+  .spacer { display: none; }
+  .header-actions { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: nowrap; }
+
+  /* Body lock when modal is open */
+  body.has-modal { height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+
+  /* Prevent scroll chaining; allow vertical panning inside modal */
+  .modal, .modal-backdrop, .modal-content, .modal-body { overscroll-behavior: contain; touch-action: pan-y; }
+
+  /* Modal layout and internal scroll */
+  .modal { display: flex; align-items: center; justify-content: center; padding: 12px; }
+  .modal-content { display: flex; flex-direction: column; width: 100%; max-width: 640px; max-height: 92vh; }
+  .modal-header { position: sticky; top: 0; z-index: 1; background: #0c111a; }
+  .modal-body { flex: 1 1 auto; overflow: auto; -webkit-overflow-scrolling: touch; }
 }
