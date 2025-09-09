@@ -1,17 +1,19 @@
 {
   "app": {
-    "title": "Structured Data Extractor",
-    "subtitle": "Extract structured data from files using a custom schema you define here. Simplified demo for quick tests."
+    "title": "Document Data Extractor",
+    "subtitle": "Extract the key information you need from your files in seconds using AI"
   },
   "header": { "language": "Language", "help": "Help", "info": "Info" },
   "files": {
-    "title": "Files",
+    "title": "1. Upload your files",
+    "subtitle": "Choose one or more files to analyze and extract data from",
     "dropHint": "Drag & drop files here or click to select",
     "select": "Select files"
   },
   "schema": {
     "title": "Schema & Result",
-    "configTitle": "Schema & Configuration",
+    "configTitle": "2. Choose what data to extract",
+    "subtitle": "Fill in the fields for the data you want the AI to find and extract for you",
     "addField": "Add field",
     "preview": "Schema (preview)",
     "name": { "placeholder": "Field name" },
@@ -30,7 +32,7 @@
     "extractAsList": "Extract as list",
     "sections": {"prompt": "Prompt", "system": "System Instruction", "model": "Model", "options": "Options"},
     "help": {
-      "prompt": "Task-specific instruction. Used to describe what to extract.",
+      "prompt": "Brief prompt to add context or a basic explanation.",
       "system": "Global behavior/rules for the model. Applied to all requests.",
       "model": "Choose the provider model to run the extraction.",
       "options": "Additional toggles and display options."
@@ -41,18 +43,18 @@
     "system": { "label": "System Instruction", "placeholder": "Do not fabricate data. Use null when information is missing. Follow the provided JSON schema strictly." }
   },
   "model": { "label": "Model" },
-  "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove" },
+  "actions": { "submit": "Extract Data", "clear": "Clear All", "remove": "Remove" },
   "help": {
     "title": "How to use",
     "steps": {
-      "config": "Add your files on the left (PDFs or images, scanned or digital).",
-      "fields": "Add the fields you want on the right (for example: Invoice number, Date, Total).",
-      "files": "Optionally add a description for each field if you need to specify details.",
-      "submit": "You can also add a prompt to give global context.",
+      "config": "1. Upload your files (PDFs or images, scanned or digital).",
+      "fields": "2. Add the names of the fields and their data types.",
+      "files": "3. Optionally add a description for each field if you need to specify details.",
+      "submit": "4. Submit your request along with the files and you'll get your results in a few seconds.",
       "limits": "You may add system instructions. By default, if a value isn’t found it will be left empty rather than invented."
     }
   },
-  "actions": { "submit": "Submit", "clear": "Clear", "remove": "Remove", "close": "Close" },
+  "actions": { "submit": "Extract Data", "clear": "Clear All", "remove": "Remove", "close": "Close" },
   "results": { "title": "Results", "ok": "Success", "error": "Error", "model": "Model", "trace": "Trace", "empty": "No results found." },
   "errors": {
     "configMissing": "API_URL not configured. Create web/config.js from config.example.js.",

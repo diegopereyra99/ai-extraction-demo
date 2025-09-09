@@ -1,17 +1,19 @@
 {
   "app": {
-    "title": "Extractor de Datos Estructurados",
-    "subtitle": "Extrae datos estructurados de archivos con un esquema personalizado. Demo simplificada para hacer pruebas simples."
+    "title": "Extractor de Datos de Documentos",
+    "subtitle": "Extrae la información clave que necesitas de tus archivos en segundos con IA"
   },
   "header": { "language": "Idioma", "help": "Ayuda", "info": "Info" },
   "files": {
-    "title": "Archivos",
+    "title": "1. Sube tus archivos",
+    "subtitle": "Elige uno o más archivos para analizar y extraer datos",
     "dropHint": "Arrastra y suelta archivos aquí o haz clic para seleccionar",
     "select": "Seleccionar archivos"
   },
   "schema": {
     "title": "Esquema y Resultado",
-    "configTitle": "Esquema y Configuración",
+    "configTitle": "2. Elige qué datos extraer",
+    "subtitle": "Completa los campos de los datos que quieres que la IA encuentre y extraiga por ti",
     "addField": "Agregar campo",
     "preview": "Esquema (vista previa)",
     "name": { "placeholder": "Nombre del campo" },
@@ -30,7 +32,7 @@
     "extractAsList": "Extraer como lista",
     "sections": {"prompt": "Prompt", "system": "Instrucción del sistema", "model": "Modelo", "options": "Opciones"},
     "help": {
-      "prompt": "Instrucción específica de la tarea. Describe qué extraer.",
+      "prompt": "Breve prompt para añadir contexto o una explicación básica.",
       "system": "Reglas/comportamiento global del modelo. Se aplica a todas las solicitudes.",
       "model": "Elige el modelo del proveedor para ejecutar la extracción.",
       "options": "Interruptores y opciones de visualización adicionales."
@@ -41,14 +43,14 @@
     "system": { "label": "Instrucción del sistema", "placeholder": "No inventes datos. Usa null si falta información. Sigue estrictamente el esquema JSON proporcionado." }
   },
   "model": { "label": "Modelo" },
-  "actions": { "submit": "Enviar", "clear": "Limpiar", "remove": "Quitar", "close": "Cerrar" },
+  "actions": { "submit": "Extraer datos", "clear": "Limpiar todo", "remove": "Quitar", "close": "Cerrar" },
   "help": {
     "title": "Cómo usar",
     "steps": {
-      "config": "Añade tus archivos en el panel izquierdo (PDFs o imágenes, escaneadas o digitales).",
-      "fields": "Agrega los campos que quieras en la derecha (por ejemplo: Número de factura, Fecha, Total).",
-      "files": "Opcionalmente agrega una descripción a cada campo si necesitas especificar detalles.",
-      "submit": "También puedes añadir un prompt para dar contexto global.",
+      "config": "1. Sube tus archivos (PDFs o imágenes, escaneadas o digitales).",
+      "fields": "2. Añade los nombres de los campos y sus tipos de dato.",
+      "files": "3. Opcionalmente añade una descripción a cada campo si necesitas especificar detalles.",
+      "submit": "4. Envía tu solicitud junto con los archivos y obtendrás los resultados en pocos segundos.",
       "limits": "Puedes añadir instrucciones del sistema. Por defecto, si un valor no se encuentra se deja vacío en lugar de inventarlo."
     }
   },

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title data-i18n="app.title">Structured Data Extractor</title>
+    <title data-i18n="app.title">Document Data Extractor</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -11,8 +11,8 @@
 
     <header class="topbar">
       <div class="title-group">
-        <h1 class="app-title" data-i18n="app.title">Structured Data Extractor</h1>
-        <p class="app-subtitle" data-i18n="app.subtitle">Extract structured data from files using a custom schema you define here. Demo app; more complex scenarios are possible.</p>
+        <h1 class="app-title" data-i18n="app.title">Document Data Extractor</h1>
+        <p class="app-subtitle" data-i18n="app.subtitle">Extract the key information you need from your files in seconds using AI</p>
       </div>
       <div class="spacer"></div>
       <div class="header-actions">
@@ -35,7 +35,8 @@
 
     <main class="container">
       <section class="panel" aria-labelledby="filesHeading">
-        <h2 id="filesHeading" data-i18n="files.title">Files</h2>
+        <h2 id="filesHeading" data-i18n="files.title">1. Upload your files</h2>
+        <p class="section-subtitle" data-i18n="files.subtitle">Choose one or more files to analyze and extract data from</p>
         <div id="dropzone" class="dropzone" aria-label="Dropzone" role="button" tabindex="0" data-i18n-title="files.dropHint" title="Drag & drop files here or click to select">
           <p data-i18n="files.dropHint">Drag & drop files here</p>
         </div>
@@ -52,7 +53,8 @@
 
       <div class="right-col">
         <section class="panel" aria-labelledby="schemaHeading">
-          <h2 id="schemaHeading" data-i18n="schema.configTitle">Schema & Configuration</h2>
+          <h2 id="schemaHeading" data-i18n="schema.configTitle">2. Choose what data to extract</h2>
+          <p class="section-subtitle" data-i18n="schema.subtitle">Fill in the fields for the data you want the AI to find and extract for you</p>
           <div class="schema-builder">
             <div id="fieldsContainer" class="fields"></div>
             <div id="schemaErrors" class="status" role="status" aria-live="polite"></div>
@@ -71,7 +73,7 @@
               <div class="adv-grid">
                 <section class="adv-section">
                   <h4 class="adv-title" data-i18n="advanced.sections.prompt">Prompt</h4>
-                  <p class="adv-help" data-i18n="advanced.help.prompt">Short instruction about what to extract.</p>
+                  <p class="adv-help" data-i18n="advanced.help.prompt">Brief prompt to add context or a basic explanation.</p>
                   <input id="promptInput" type="text" placeholder="Extract the requested fields from the input. Keep responses concise." />
                 </section>
                 <section class="adv-section">
@@ -106,8 +108,8 @@
           </div>
 
           <div class="actions">
-            <button id="submitBtn" class="primary" disabled data-i18n="actions.submit">Submit</button>
-            <button id="clearBtn" data-i18n="actions.clear">Clear</button>
+            <button id="submitBtn" class="primary" disabled data-i18n="actions.submit">Extract Data</button>
+            <button id="clearBtn" data-i18n="actions.clear">Clear All</button>
           </div>
         </section>
 
@@ -139,11 +141,10 @@
         </div>
         <div class="modal-body">
           <ul class="help-list">
-            <li data-i18n="help.steps.config">Add your files on the left (PDFs or images, scanned or digital).</li>
-            <li data-i18n="help.steps.fields">Add the fields you want on the right (for example: Invoice number, Date, Total).</li>
-            <li data-i18n="help.steps.files">Optionally add a description for each field if you need to specify details.</li>
-            <li data-i18n="help.steps.submit">You can also add a prompt to give global context.</li>
-            <li data-i18n="help.steps.limits">You may add system instructions. By default, if a value isn’t found it will be left empty rather than invented.</li>
+            <li data-i18n="help.steps.config">1. Upload your files (PDFs or images, scanned or digital).</li>
+            <li data-i18n="help.steps.fields">2. Add the names of the fields and their data types.</li>
+            <li data-i18n="help.steps.files">3. Optionally add a description for each field if you need to specify details.</li>
+            <li data-i18n="help.steps.submit">4. Submit your request along with the files and you'll get your results in a few seconds.</li>
           </ul>
         </div>
       </div>

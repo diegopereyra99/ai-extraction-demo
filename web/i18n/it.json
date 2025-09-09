@@ -1,17 +1,19 @@
 {
   "app": {
-    "title": "Estrattore di Dati Strutturati",
-    "subtitle": "Estrai dati strutturati dai file con uno schema personalizzato. Demo semplificata per fare prove semplici."
+    "title": "Estrattore di Dati dai Documenti",
+    "subtitle": "Estrai le informazioni chiave di cui hai bisogno dai tuoi file in pochi secondi con l'IA"
   },
   "header": { "language": "Lingua", "help": "Guida", "info": "Info" },
   "files": {
-    "title": "File",
+    "title": "1. Carica i tuoi file",
+    "subtitle": "Scegli uno o più file da analizzare ed estrarre i dati",
     "dropHint": "Trascina qui i file oppure fai clic per selezionare",
     "select": "Seleziona file"
   },
   "schema": {
     "title": "Schema e Risultato",
-    "configTitle": "Schema e Configurazione",
+    "configTitle": "2. Scegli quali dati estrarre",
+    "subtitle": "Compila i campi per i dati che vuoi che l'IA trovi ed estragga per te",
     "addField": "Aggiungi campo",
     "preview": "Schema (anteprima)",
     "name": { "placeholder": "Nome del campo" },
@@ -30,7 +32,7 @@
     "extractAsList": "Estrai come elenco",
     "sections": {"prompt": "Prompt", "system": "Istruzioni di sistema", "model": "Modello", "options": "Opzioni"},
     "help": {
-      "prompt": "Istruzione specifica del compito. Descrive cosa estrarre.",
+      "prompt": "Breve prompt per aggiungere contesto o una spiegazione di base.",
       "system": "Regole/comportamento globali del modello. Si applica a tutte le richieste.",
       "model": "Scegli il modello del provider per l'estrazione.",
       "options": "Opzioni e impostazioni di visualizzazione aggiuntive."
@@ -41,14 +43,14 @@
     "system": { "label": "Istruzioni di sistema", "placeholder": "Non inventare dati. Usa null quando le informazioni mancano. Segui rigorosamente lo schema JSON fornito." }
   },
   "model": { "label": "Modello" },
-  "actions": { "submit": "Invia", "clear": "Pulisci", "remove": "Rimuovi", "close": "Chiudi" },
+  "actions": { "submit": "Estrai dati", "clear": "Pulisci tutto", "remove": "Rimuovi", "close": "Chiudi" },
   "help": {
     "title": "Come usare",
     "steps": {
-      "config": "Aggiungi i file a sinistra (PDF o immagini, scansionate o digitali).",
-      "fields": "Aggiungi i campi desiderati a destra (ad esempio: Numero fattura, Data, Totale).",
-      "files": "Facoltativamente aggiungi una descrizione per ogni campo se devi specificare dettagli.",
-      "submit": "Puoi anche aggiungere un prompt per fornire un contesto generale.",
+      "config": "1. Carica i tuoi file (PDF o immagini, scansionate o digitali).",
+      "fields": "2. Aggiungi i nomi dei campi e i relativi tipi di dato.",
+      "files": "3. Facoltativamente aggiungi una descrizione per ogni campo se devi specificare dettagli.",
+      "submit": "4. Invia la tua richiesta insieme ai file e otterrai i risultati in pochi secondi.",
       "limits": "Puoi aggiungere istruzioni di sistema. Per impostazione predefinita, se un valore non viene trovato viene lasciato vuoto e non inventato."
     }
   },
