@@ -44,8 +44,6 @@
 
   function initLanguage() {
     I18n.init().then(() => {
-      // Set default placeholders
-      // Keep explicit defaults already set in HTML; if i18n provides values, prefer them
       const sys = I18n.t('inputs.system.placeholder');
       const prm = I18n.t('inputs.prompt.placeholder');
       if (sys && sys !== 'inputs.system.placeholder') $('systemInput').placeholder = sys;
@@ -316,6 +314,8 @@
           updatePreview();
         });
         const name = document.createElement('input');
+        // Bind placeholder to i18n updates and set current value
+        name.setAttribute('data-i18n-placeholder', 'schema.name.placeholder');
         name.placeholder = I18n.t('schema.name.placeholder');
         name.value = fld.name;
         name.addEventListener('input', () => { fld.name = name.value; updatePreview(); });
@@ -323,12 +323,17 @@
         const type = document.createElement('select');
         ['STRING','NUMBER','BOOLEAN','DATE'].forEach((t) => {
           const opt = document.createElement('option');
-          opt.value = t; opt.textContent = I18n.t(`schema.type.${t}`); type.appendChild(opt);
+          opt.value = t;
+          opt.setAttribute('data-i18n', `schema.type.${t}`);
+          opt.textContent = I18n.t(`schema.type.${t}`);
+          type.appendChild(opt);
         });
         type.value = fld.type;
         type.addEventListener('change', () => { fld.type = type.value; updatePreview(); });
 
         const desc = document.createElement('input');
+        // Bind placeholder to i18n updates and set current value
+        desc.setAttribute('data-i18n-placeholder', 'schema.description.placeholder');
         desc.placeholder = I18n.t('schema.description.placeholder');
         desc.value = fld.description;
         desc.addEventListener('input', () => { fld.description = desc.value; updatePreview(); });
@@ -341,6 +346,8 @@
         req.type = 'checkbox'; req.checked = fld.required; req.id = `req_${fld.id}`;
         req.addEventListener('change', () => { fld.required = req.checked; updatePreview(); });
         const reqLbl = document.createElement('span');
+        // Bind label to i18n updates and set current value
+        reqLbl.setAttribute('data-i18n', 'schema.required');
         reqLbl.textContent = I18n.t('schema.required');
         reqWrap.htmlFor = req.id;
         reqWrap.append(req, reqLbl);
@@ -364,7 +371,10 @@
       add.id = 'addFieldBtn';
       add.className = 'field-add';
       const plus = document.createElement('span'); plus.setAttribute('aria-hidden','true'); plus.textContent = '+';
-      const lbl = document.createElement('span'); lbl.textContent = I18n.t('schema.addField');
+      const lbl = document.createElement('span');
+      // Bind label to i18n updates and set current value
+      lbl.setAttribute('data-i18n', 'schema.addField');
+      lbl.textContent = I18n.t('schema.addField');
       add.append(plus, lbl);
       add.addEventListener('click', () => {
         state.fields.push(makeField());
@@ -377,6 +387,8 @@
         } catch {}
       });
       fieldsEl.appendChild(add);
+      // Ensure any [data-i18n*] we attached are translated immediately
+      try { if (window.I18n && typeof I18n.apply === 'function') I18n.apply(fieldsEl); } catch {}
       // Allow dropping at the end to append
       fieldsEl.addEventListener('dragover', (e) => { e.preventDefault(); });
       fieldsEl.addEventListener('drop', (e) => {
@@ -655,8 +667,18 @@
     result.appendChild(meta);
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    initLanguage();
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Ensure i18n is ready before first render so initial strings are translated
+    await I18n.init();
+    // Set placeholders derived from i18n and show config warning
+    try {
+      const sys = I18n.t('inputs.system.placeholder');
+      const prm = I18n.t('inputs.prompt.placeholder');
+      if (sys && sys !== 'inputs.system.placeholder') $('systemInput').placeholder = sys;
+      if (prm && prm !== 'inputs.prompt.placeholder') $('promptInput').placeholder = prm;
+    } catch {}
+    showConfigWarning();
+
     initFiles();
     initSchema();
     // Modal helpers (Help and About)

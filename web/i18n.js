@@ -80,6 +80,6 @@
     }
   }
 
-  window.I18n = { init, setLocale, t };
+  // Expose a manual apply helper so dynamic UIs can request re-translation
+  window.I18n = { init, setLocale, t, apply: (root) => applyTranslations(root || document) };
 })();
-
