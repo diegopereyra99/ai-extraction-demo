@@ -25,8 +25,9 @@ This is a prototype built for demos and quick experiments. It handles small file
 
 ## Documentation
 
-See the documentation in this repo for setup and usage:  
+See the documentation in this repo for setup and usage:
 
-- [**GCP Setup**](docs/01-gcp-setup.md) — Create a project on Google Cloud Platform, enable Vertex AI.  
-- [**API Guide**](docs/02-extract-api.md) — Deploy a Cloud Function to process files and schemas and return structured data.  
-- [**Web App Notes**](docs/03-webapp-spec.md) — Run the UI locally to test the endpoint interactively.  
+- [**GCP Setup**](docs/gcp-setup.md) — Create a project on Google Cloud Platform, enable Vertex AI.
+- [**API Guide**](docs/api-guide.md) — Deploy a Cloud Function to process files and schemas and return structured data.
+- [**Web App Guide**](web/README.md) — Run the UI locally and understand its features.
+- [**System Overview (Spec)**](docs/specs/system-spec.md) — Technical scope and acceptance for v0.

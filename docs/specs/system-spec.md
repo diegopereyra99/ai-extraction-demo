@@ -1,5 +1,7 @@
 # System Spec — Gemini Structured Extractor (v0)
 
+Audience: Developers | Type: Spec | Status: Current (v0) | Last verified: 2025-09-10
+
 This document defines the v0 scope and acceptance criteria for the demo: a single HTTP extraction endpoint and a super‑light local webapp. It consolidates decisions from the original spec and reflects what’s implemented in the repo today.
 
 ## Goals
@@ -81,11 +83,11 @@ This document defines the v0 scope and acceptance criteria for the demo: a singl
 
 ## Acceptance (v0)
 - Can open the local web and submit to the endpoint with real small files and a flat schema; see a results table with one row using the schema columns in the builder’s order; or a clear error message.
-- Manual tests: see `docs/02-extract-api.md` and `tests/` scripts (local and deployed).
+- Manual tests: see `docs/api-guide.md` and `tests/` scripts (local and deployed).
 - UI language can be switched between English, Spanish, and Italian at runtime, with updated labels, placeholders, and validation messages.
 
 ## Out of scope (for V0)
-- GCS uploads; file viewer; nested schemas; auth; persistence; advanced validation/normalization.
+- GCS uploads; advanced file viewer (beyond basic PDF/image preview); nested schema authoring; auth; persistence; advanced validation/normalization.
 - Backend language-specific behavior; translation of server-side error strings; pluralization rules beyond simple static copy.
 
 ## Roadmap

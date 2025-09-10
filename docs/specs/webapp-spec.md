@@ -1,11 +1,15 @@
 # Webapp Spec — Gemini Structured Extractor (v0)
 
+Audience: Developers | Type: Spec | Status: Current (v0) | Last verified: 2025-09-10
+
+For the user guide and local run instructions, see: web/README.md
+
 Detailed specification for the lightweight local frontend that builds a flat schema, uploads files inline, and renders results from the `/extract` API.
 
 ## Goals & Constraints
 - Single static page; no frameworks (no React/Vue). Use plain HTML + CSS + JS.
 - Keep bundle minimal; no build step/bundlers. Optionally use JS modules if helpful.
-- Run locally by opening `index.html` (ideally via a simple static server to avoid CORS/path issues).
+- Serve locally via a simple static server (e.g., `make serve-web`). Do not open via `file://` because locale JSON files must be fetched over HTTP.
 - All code and docs in English.
 - Internationalization (i18n): UI copy supports English, Spanish, and Italian with runtime language switching.
 
@@ -36,7 +40,7 @@ web/
   - Left panel: Files
     - Drag & drop area and a “Select files” button.
     - File list with name, size (KB/MB), and MIME.
-    - Placeholder frame for future viewer (PDF/image), not functional in v0.
+    - Basic viewer overlay for PDFs and images (opens a simple preview on click).
   - Right panel: Schema & Result
     - Schema builder with “Add field” button and a list of field rows.
     - JSON Schema preview (read-only <pre> block).
@@ -64,8 +68,10 @@ web/
 - File list:
   - Show: filename, size, mime. Provide a small remove button per row.
   - Maintain an internal array `state.files: File[]` reflecting current list.
-- Placeholder viewer:
-  - A simple bordered `<div>` with text “Viewer placeholder (V2)”. No rendering in v0.
+- Viewer overlay:
+  - Clicking a file opens a lightweight overlay.
+  - PDFs render in an `<iframe>`; images render in an `<img>`.
+  - Other types show a simple “Preview not available” message.
 
 ### Schema Builder
 - Field model (UI row):
@@ -94,6 +100,10 @@ web/
       - Add `description` if non-empty.
     - If Required is checked, append the Name to `required`.
   - Ensure `required` contains only names present in `properties` and has no duplicates.
+  
+- Optional "Extract as list" toggle:
+  - When enabled, wrap the object schema as an array: `{ "type": "ARRAY", "items": <objectSchema> }`.
+  - Useful when expecting multiple records from a single document.
 - UI feedback:
   - Render preview JSON in a `<pre>` updated live on any change.
   - Show inline validation messages near affected inputs (e.g., “Name is required”, “Duplicate name”).
@@ -198,4 +208,3 @@ web/
 - Persist fields in `localStorage`.
 - Export CSV/JSON of results.
 - Additional locales and server-side prompt localization.
-

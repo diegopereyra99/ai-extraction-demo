@@ -4,7 +4,17 @@ Scope: single HTTP endpoint to extract structured data. The backend accepts any 
 
 Quick Test
 - Ensure the server is running on `http://localhost:8080`.
-- Post one file + schema: `tests/post_one.sh data/files/invoice.pdf examples/schemas/invoice.json`.
+- Post one file + schema: `tests/post_one.sh examples/files/invoice.pdf examples/schemas/invoice.json`.
+
+## Deployment (overview)
+
+- Prerequisites — GCP project setup: see [gcp-setup.md](gcp-setup.md) for creating the project, enabling APIs, and creating the service account with roles.
+- Quick deploy (Makefile), from repo root:
+  - Copy and edit env: `cp .env.yaml.example .env.yaml` (set project, region, service account)
+  - One‑time: `make enable-apis` and `make setup-sa`
+  - Deploy: `make deploy-api`
+  - Get URL: `make url-api`
+- Full deployment details and local run: see [api/README.md](../api/README.md).
 
 ## Endpoint
 - Method: POST
@@ -54,7 +64,7 @@ curl -s -X POST http://localhost:8080/extract \
 - ok: boolean
 - model: string
 - data: JSON value matching the provided schema shape
-- usage: object (may include token metadata when using Vertex). In local stub mode includes `note`. If Vertex is requested but the SDK lacks schema support, the server still calls the model without `response_schema` and attempts to enforce shape via instructions.
+- usage: object (may include token metadata when using Vertex). In local stub mode includes a `note`.
 - trace_id: string (for debugging)
 - error: string | null
 
@@ -85,5 +95,4 @@ Example:
 - Place example documents under `examples/files/` and example schemas under `examples/schemas/`.
 - Set `GOOGLE_GENAI_USE_VERTEXAI=true`, `GOOGLE_CLOUD_PROJECT`, and `GOOGLE_CLOUD_LOCATION=europe-west4` to use Vertex AI.
 - This demo does not store files; it forwards content to the model (or stubs locally).
- - Deployment: copy `.env.yaml.example` to `.env.yaml`, edit values, then run `make enable-apis` (one-time) and `make deploy-api` from the repo root. Inspect `Makefile` for details.
  - i18n: while the server currently ignores `locale`, the frontend uses it to localize UI copy. Serving the web via HTTP is required to fetch locale files.

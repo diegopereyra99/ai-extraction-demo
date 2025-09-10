@@ -13,7 +13,9 @@ Lightweight, framework‑free single page webapp for building a flat schema, upl
 1) Configure API URL
 ```
 cp web/config.example.js web/config.js
-# Edit API_URL (local dev default): http://localhost:8080/extract
+ # Edit API_URL (local dev default): http://localhost:8080/extract
+# Optional: align UI size hint with server limit
+# window.APP_CONFIG.MAX_TOTAL_UPLOAD_BYTES = 20 * 1024 * 1024
 ```
 
 2) Serve the app (pick one)
@@ -47,7 +49,7 @@ python -m functions_framework --target=extract --port=8080 --debug
 - The app shows server errors and includes `trace_id` when available.
 
 ## Internationalization
-- Locale files live under `web/i18n/` (`en.json`, `es.json`, `it.json`).
+- Locale files live under `web/i18n/` (`en.json`, `es.json`, `it.json`) and are included in this repo.
 - Add a new locale by adding a `*.json` file and an `<option>` in the language selector, then mapping it in `i18n.js`.
 - Mark translatable nodes with `data-i18n="key.path"`; placeholders use `data-i18n-placeholder`.
 

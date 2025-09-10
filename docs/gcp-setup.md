@@ -1,4 +1,4 @@
-# 01 — GCP project: minimal setup
+# GCP Project: Minimal Setup
 
 Scope: create a GCP project, enable required APIs, and create a service account used by the Cloud Function.
 
@@ -97,3 +97,4 @@ Notes
 - The Makefile expects `SERVICE_ACCOUNT_ID=gemini-extractor-sa` and `CLOUD_FUNCTION_NAME=extract` in `.env.yaml` (see `.env.yaml.example`).
 - The deploy identity (your user or CI) must have permissions to deploy Cloud Functions and to use the service account (e.g., roles/cloudfunctions.developer and roles/iam.serviceAccountUser).
 Done.
+

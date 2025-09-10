@@ -1,6 +1,8 @@
 # Extract Function Spec — Gemini Structured Extractor (v0)
 
-Note: This document is superseded by the English system spec at `docs/system-spec.md`. The frontend/webapp now has its own detailed spec at `docs/04-webapp-spec.md`. Keeping this file for historical context.
+Audience: Developers | Type: Spec (Legacy) | Status: Archived | Last verified: 2025-09-10
+
+Note: This document is superseded by the system spec at `docs/specs/system-spec.md`. The frontend/webapp spec lives at `docs/specs/webapp-spec.md`. Keeping this file for historical context.
 
 ## 1) Objetivo
 - **Backend**: una Cloud Function (Gen2) con un único endpoint HTTP `/extract` que acepta archivos + prompt + system instruction + schema y devuelve JSON estructurado usando Gemini (vía **Vertex AI** con **service account**).
