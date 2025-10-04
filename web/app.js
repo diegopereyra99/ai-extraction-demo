@@ -21,7 +21,7 @@
     loading: false,
     errors: { fields: [], global: [] },
     sizeOverLimit: false,
-    asList: false,
+    asList: true,
     view: { open: false, url: null, kind: null, lastFocusEl: null },
   };
 
@@ -772,8 +772,8 @@
     // Extract as list toggle
     const asListToggle = document.getElementById('asListToggle');
     if (asListToggle) {
-      asListToggle.checked = false;
-      state.asList = false;
+      asListToggle.checked = true;
+      state.asList = true;
       asListToggle.addEventListener('change', () => {
         state.asList = !!asListToggle.checked;
         // Recompute preview to reflect wrapping/unwrapping
